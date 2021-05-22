@@ -1,0 +1,286 @@
+#!markdown
+
+# F# Interactive options
+
+This article describes the command-line options supported by F# Interactive, `fsi.exe`. F# Interactive accepts many of the same command-line options as the F# compiler, but also accepts some additional options.
+
+## Use F# Interactive for scripting
+
+F# Interactive, `dotnet fsi`, can be launched interactively, or it can be launched from the command line to run a script. The command-line syntax is
+
+#!fsharp
+
+dotnet fsi [options] [ script-file [arguments] ]
+
+
+#!markdown
+
+The file extension for F# script files is `.fsx`.
+
+## Table of F# Interactive Options
+
+The following table summarizes the options supported by F# Interactive. You can set these options on the command line or through the Visual Studio IDE. To set these options in the Visual Studio IDE, open the <strong>Tools</strong> menu, select <strong>Options</strong>, expand the <strong>F# Tools</strong> node, and then select <strong>F# Interactive</strong>.
+
+Where lists appear in F# Interactive option arguments, list elements are separated by semicolons (`;`).
+
+<table class="table"><caption class="visually-hidden">Table of F# Interactive Options</caption>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>--</strong></td>
+<td>Used to instruct F# Interactive to treat remaining arguments as command-line arguments to the F# program or script, which you can access in code by using the list <strong>fsi.CommandLineArgs</strong>.</td>
+</tr>
+<tr>
+<td><strong>--checked</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--codepage:&lt;int&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--consolecolors</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Outputs warning and error messages in color.</td>
+</tr>
+<tr>
+<td><strong>--crossoptimize</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Enable or disable cross-module optimizations.</td>
+</tr>
+<tr>
+<td><strong>--debug</strong>[<strong>+</strong>|<strong>-</strong>]<br><br><strong>--debug:</strong>[<strong>full</strong>|<strong>pdbonly</strong>|<strong>portable</strong>|<strong>embedded</strong>]<br><br><strong>-g</strong>[<strong>+</strong>|<strong>-</strong>]<br><br><strong>-g:</strong>[<strong>full</strong>|<strong>pdbonly</strong>|<strong>portable</strong>|<strong>embedded</strong>]</td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--define:&lt;string&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--deterministic</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Produces a deterministic assembly (including module version GUID and timestamp).</td>
+</tr>
+<tr>
+<td><strong>--exec</strong></td>
+<td>Instructs F# interactive to exit after loading the files or running the script file given on the command line.</td>
+</tr>
+<tr>
+<td><strong>--fullpaths</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--gui</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Enables or disables the Windows Forms event loop. The default is enabled.</td>
+</tr>
+<tr>
+<td><strong>--help</strong><br><br><strong>-?</strong></td>
+<td>Used to display the command-line syntax and a brief description of each option.</td>
+</tr>
+<tr>
+<td><strong>--lib:&lt;folder-list&gt;</strong><br><br><strong>-I:&lt;folder-list&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--load:&lt;filename&gt;</strong></td>
+<td>Compiles the given source code at startup and loads the compiled F# constructs into the session.</td>
+</tr>
+<tr>
+<td><strong>--mlcompatibility</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--noframework</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a></td>
+</tr>
+<tr>
+<td><strong>--nologo</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--nowarn:&lt;warning-list&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--optimize</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--preferreduilang:&lt;lang&gt;</strong></td>
+<td>Specifies the preferred output language culture name (for example, es-ES, ja-JP).</td>
+</tr>
+<tr>
+<td><strong>--quiet</strong></td>
+<td>Suppress F# Interactive's output to the <strong>stdout</strong> stream.</td>
+</tr>
+<tr>
+<td><strong>--quotations-debug</strong></td>
+<td>Specifies that extra debugging information should be emitted for expressions that are derived from F# quotation literals and reflected definitions. The debug information is added to the custom attributes of an F# expression tree node. See <a href="code-quotations" data-linktype="relative-path">Code Quotations</a> and <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-quotations-fsharpexpr.html#CustomAttributes" data-linktype="external">Expr.CustomAttributes</a>.</td>
+</tr>
+<tr>
+<td><strong>--readline</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Enable or disable tab completion in interactive mode.</td>
+</tr>
+<tr>
+<td><strong>--reference:&lt;filename&gt;</strong><br><br><strong>-r:&lt;filename&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--tailcalls</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Enable or disable the use of the tail IL instruction, which causes the stack frame to be reused for tail recursive functions. This option is enabled by default.</td>
+</tr>
+<tr>
+<td><strong>--targetprofile:&lt;string&gt;</strong></td>
+<td>Specifies target framework profile of this assembly. Valid values are `mscorlib`, `netcore`, or `netstandard`. The default is `mscorlib`.</td>
+</tr>
+<tr>
+<td><strong>--use:&lt;filename&gt;</strong></td>
+<td>Tells the interpreter to use the given file on startup as initial input.</td>
+</tr>
+<tr>
+<td><strong>--utf8output</strong></td>
+<td>Same as the fsc.exe compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--warn:&lt;warning-level&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--warnaserror</strong>[<strong>+</strong>|<strong>-</strong>]</td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+<tr>
+<td><strong>--warnaserror</strong>[<strong>+</strong>|<strong>-</strong>]:<strong>&lt;int-list&gt;</strong></td>
+<td>Same as the <strong>fsc.exe</strong> compiler option. For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.</td>
+</tr>
+</tbody>
+</table>
+
+## F# Interactive structured printing
+
+F# Interactive (`dotnet fsi`) uses an extended version of <a href="plaintext-formatting" data-linktype="relative-path">structured plain text formatting</a> to
+report values.
+
+The available settings to customize plain text printing for reported values are:
+
+#!fsharp
+
+open System.Globalization
+
+fsi.FormatProvider <- CultureInfo("de-DE")  // control the default culture for primitives
+
+fsi.PrintWidth <- 120        // Control the width used for structured printing
+
+fsi.PrintDepth <- 10         // Control the maximum depth of nested printing
+
+fsi.PrintLength <- 10        // Control the length of lists and arrays
+
+fsi.PrintSize <- 100         // Control the maximum overall object count
+
+fsi.ShowProperties <- false  // Control whether properties of .NET objects are shown by default
+
+fsi.ShowIEnumerable <- false // Control whether sequence values are expanded by default
+
+fsi.ShowDeclarationValues <- false // Control whether values are shown for declaration outputs
+
+
+Printing in F# Interactive outputs can be customized by using `fsi.AddPrinter` and `fsi.AddPrintTransformer`.
+The first function gives text to replace the printing of an object. The second function returns a surrogate object to display
+instead. For example, consider the following F# code:
+
+#!fsharp
+
+open System
+
+fsi.AddPrinter<DateTime>(fun dt -> dt.ToString("s"))
+
+type DateAndLabel =
+    { Date: DateTime
+      Label: string  }
+
+let newYearsDay1999 =
+    { Date = DateTime(1999, 1, 1)
+      Label = "New Year" }
+
+
+#!markdown
+
+If you execute the example in F# Interactive, it outputs based on the formatting option set. In this case, it affects the formatting of date and time:
+
+#!fsharp
+
+type DateAndLabel =
+  { Date: DateTime
+    Label: string }
+val newYearsDay1999 : DateAndLabel = { Date = 1999-01-01T00:00:00
+                                       Label = "New Year" }
+
+
+#!markdown
+
+`fsi.AddPrintTransformer` can be used to give a surrogate object for printing:
+
+#!fsharp
+
+type MyList(values: int list) =
+    member _.Values = values
+
+fsi.AddPrintTransformer(fun (x:MyList) -> box x.Values)
+
+let x = MyList([1..10])
+
+
+#!markdown
+
+This outputs:
+
+#!fsharp
+
+val x : MyList = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
+
+
+#!markdown
+
+If the transformer function passed to `fsi.AddPrintTransformer` returns `null`, then the print transformer is ignored.
+This can be used to filter any input value by starting with type `obj`.  For example:
+
+#!fsharp
+
+fsi.AddPrintTransformer(fun (x:obj) ->
+    match x with
+    | :? string as s when s = "beep" -> box ["quack"; "quack"; "quack"]
+    | _ -> null)
+
+let y = "beep"
+
+
+#!markdown
+
+This outputs:
+
+#!fsharp
+
+val y : string = ["quack"; "quack"; "quack"]
+
+
+#!markdown
+
+## Related topics
+
+<table class="table"><caption class="visually-hidden">Related topics</caption>
+<thead>
+<tr>
+<th>Title</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="compiler-options" data-linktype="relative-path">Compiler Options</a></td>
+<td>Describes command-line options available for the F# compiler, <strong>fsc.exe</strong>.</td>
+</tr>
+</tbody>
+</table>
+

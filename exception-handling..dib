@@ -1,0 +1,49 @@
+#!markdown
+
+# Exception Handling
+
+This section contains information about exception handling support in the F# language.
+
+## Exception Handling Basics
+
+Exception handling is the standard way of handling error conditions in the .NET Framework. Thus, any .NET language must support this mechanism, including F#. An <em>exception</em> is an object that encapsulates information about an error. When errors occur, exceptions are raised and regular execution stops. Instead, the runtime searches for an appropriate handler for the exception. The search starts in the current function, and proceeds up the stack through the layers of callers until a matching handler is found. Then the handler is executed.
+
+In addition, as the stack is unwound, the runtime executes any code in `finally` blocks, to guarantee that objects are cleaned up correctly during the unwinding process.
+
+## Related Topics
+
+<table class="table"><caption class="visually-hidden">Related Topics</caption>
+<thead>
+<tr>
+<th>Title</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="exception-types" data-linktype="relative-path">Exception Types</a></td>
+<td>Describes how to declare an exception type.</td>
+</tr>
+<tr>
+<td><a href="the-try-with-expression" data-linktype="relative-path">Exceptions: The `try...with` Expression</a></td>
+<td>Describes the language construct that supports exception handling.</td>
+</tr>
+<tr>
+<td><a href="the-try-finally-expression" data-linktype="relative-path">Exceptions: The `try...finally` Expression</a></td>
+<td>Describes the language construct that enables you to execute clean-up code as the stack unwinds when an exception is thrown.</td>
+</tr>
+<tr>
+<td><a href="the-raise-function" data-linktype="relative-path">Exceptions: the `raise` Function</a></td>
+<td>Describes how to throw an exception object.</td>
+</tr>
+<tr>
+<td><a href="the-failwith-function" data-linktype="relative-path">Exceptions: The `failwith` Function</a></td>
+<td>Describes how to generate a general F# exception.</td>
+</tr>
+<tr>
+<td><a href="the-invalidarg-function" data-linktype="relative-path">Exceptions: The `invalidArg` Function</a></td>
+<td>Describes how to generate an invalid argument exception.</td>
+</tr>
+</tbody>
+</table>
+

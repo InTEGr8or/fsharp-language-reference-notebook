@@ -1,0 +1,102 @@
+#!markdown
+
+# Keyword Reference
+
+This topic contains links to information about all F# language keywords.
+
+## F# Keyword Table
+
+The following table shows all F# keywords in alphabetical order, together with brief descriptions and links to relevant topics that contain more information.
+
+<table class="table"><caption class="visually-hidden">F# Keyword Table</caption>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Link</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`abstract`</td>
+<td><a href="members/" data-linktype="relative-path">Members</a><br><br><a href="abstract-classes" data-linktype="relative-path">Abstract Classes</a></td>
+<td>Indicates a method that either has no implementation in the type in which it is declared or that is virtual and has a default implementation.</td>
+</tr>
+<tr>
+<td>`and`</td>
+<td><a href="functions/let-bindings" data-linktype="relative-path">`let` Bindings</a><br><br><a href="records" data-linktype="relative-path">Records</a><br><br><a href="members/" data-linktype="relative-path">Members</a><br><br><a href="generics/constraints" data-linktype="relative-path">Constraints</a></td>
+<td>Used in mutually recursive bindings and records, in property declarations, and with multiple constraints on generic parameters.</td>
+</tr>
+<tr>
+<td>`as`</td>
+<td><a href="classes" data-linktype="relative-path">Classes</a><br><br><a href="pattern-matching" data-linktype="relative-path">Pattern Matching</a></td>
+<td>Used to give the current class object an object name. Also used to give a name to a whole pattern within a pattern match.</td>
+</tr>
+<tr>
+<td>`assert`</td>
+<td><a href="assertions" data-linktype="relative-path">Assertions</a></td>
+<td>Used to verify code during debugging.</td>
+</tr>
+<tr>
+<td>`base`</td>
+<td><a href="classes" data-linktype="relative-path">Classes</a><br><br><a href="inheritance" data-linktype="relative-path">Inheritance</a></td>
+<td>Used as the name of the base class object.</td>
+</tr>
+<tr>
+<td>`begin`</td>
+<td><a href="verbose-syntax" data-linktype="relative-path">Verbose Syntax</a></td>
+<td>In verbose syntax, indicates the start of a code block.</td>
+</tr>
+<tr>
+<td>`class`</td>
+<td><a href="classes" data-linktype="relative-path">Classes</a></td>
+<td>In verbose syntax, indicates the start of a class definition.</td>
+</tr>
+<tr>
+<td>`default`</td>
+<td><a href="members/" data-linktype="relative-path">Members</a></td>
+<td>Indicates an implementation of an abstract method; used together with an abstract method declaration to create a virtual method.</td>
+</tr>
+<tr>
+<td>`delegate`</td>
+<td><a href="delegates" data-linktype="relative-path">Delegates</a></td>
+<td>Used to declare a delegate.</td>
+</tr>
+<tr>
+<td>`do`</td>
+<td><a href="functions/do-bindings" data-linktype="relative-path">do Bindings</a><br><br><a href="loops-for-to-expression" data-linktype="relative-path">Loops: `for...to` Expression</a><br><br><a href="loops-for-in-expression" data-linktype="relative-path">Loops: `for...in` Expression</a><br><br><a href="loops-while-do-expression" data-linktype="relative-path">Loops: `while...do` Expression</a></td>
+<td>Used in looping constructs or to execute imperative code.</td>
+</tr>
+<tr>
+<td>`done`</td>
+<td><a href="verbose-syntax" data-linktype="relative-path">Verbose Syntax</a></td>
+<td>In verbose syntax, indicates the end of a block of code in a looping expression.</td>
+</tr>
+<tr>
+<td>`downcast`</td>
+<td><a href="casting-and-conversions" data-linktype="relative-path">Casting and Conversions</a></td>
+<td>Used to convert to a type that is lower in the inheritance chain.</td>
+</tr>
+<tr>
+<td>`downto`</td>
+<td><a href="loops-for-to-expression" data-linktype="relative-path">Loops: `for...to` Expression</a></td>
+<td>In a `for` expression, used when counting in reverse.</td>
+</tr>
+<tr>
+<td>`elif`</td>
+<td><a href="conditional-expressions-if-then-else" data-linktype="relative-path">Conditional Expressions: `if...then...else`</a></td>
+<td>Used in conditional branching. A short form of `else if`.</td>
+</tr>
+<tr>
+<td>`else`</td>
+<td><a href="conditional-expressions-if-then-else" data-linktype="relative-path">Conditional Expressions: `if...then...else`</a></td>
+<td>Used in conditional branching.</td>
+</tr>
+<tr>
+<td>`end`</td>
+<td><a href="structures" data-linktype="relative-path">Structures</a><br><br><a href="discriminated-unions" data-linktype="relative-path">Discriminated Unions</a><br><br><a href="records" data-linktype="relative-path">Records</a><br><br><a href="type-extensions" data-linktype="relative-path">Type Extensions</a><br><br><a href="verbose-syntax" data-linktype="relative-path">Verbose Syntax</a></td>
+<td>In type definitions and type extensions, indicates the end of a section of member definitions.<br><br>In verbose syntax, used to specify the end of a code block that starts with the `begin` keyword.</td>
+</tr>
+<tr>
+<td>`exception`</td>
+<td><a href="exception-handling/" data-linktype="relative-path">Exception Handling</a><br><br><a href="exception-handling/exception-types" 

@@ -1,0 +1,42 @@
+#!markdown
+
+# FS0009: Possible unverifiable code
+
+This message is given when:
+
+#!fsharp
+
+let n: nativeptr<bool> = NativeInterop.NativePtr.stackalloc 1
+
+
+#!fsharp
+
+type R = { Address: int }
+
+let useFixed (r: R) = 
+    use f = fixed &r.Address
+    ()
+
+
+#!fsharp
+
+open System.Runtime.InteropServices
+
+[<Struct; StructLayout(LayoutKind.Explicit)>]
+type EmptyStruct = 
+    struct end
+
+
+#!markdown
+
+In each of these cases, the compiler will give the following message:
+
+#!fsharp
+
+FS0009: Uses of this construct may result in the generation of unverifiable .NET IL code. This warning can be disabled using '--nowarn:9' or '#nowarn "9"'
+
+
+#!markdown
+
+To fix this message, you can either add the `#nowarn` directive to the source code file containing the usage, add `&lt;NoWarn&gt;9&lt;/NoWarn&gt;` to your project file, or manually add `--nowarn:9` to your F# compiler invocations. Note that the last two mechanisms will disable the warning for your entire project, whereas the first mechanism will disable the warning for only one file.
+

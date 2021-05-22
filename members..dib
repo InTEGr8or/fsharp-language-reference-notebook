@@ -1,0 +1,63 @@
+#!markdown
+
+# Members
+
+This section describes members of F# object types.
+
+## Remarks
+
+<em>Members</em> are features that are part of a type definition and are declared with the `member` keyword. F# object types such as records, classes, discriminated unions, interfaces, and structures support members. For more information, see <a href="../records" data-linktype="relative-path">Records</a>, <a href="../classes" data-linktype="relative-path">Classes</a>, <a href="../discriminated-unions" data-linktype="relative-path">Discriminated Unions</a>, <a href="../interfaces" data-linktype="relative-path">Interfaces</a>, and <a href="../structures" data-linktype="relative-path">Structures</a>.
+
+Members typically make up the public interface for a type, which is why they are public unless otherwise specified. Members can also be declared private or internal. For more information, see <a href="../access-control" data-linktype="relative-path">Access Control</a>. Signatures for types can also be used to expose or not expose certain members of a type. For more information, see <a href="../signature-files" data-linktype="relative-path">Signatures</a>.
+
+Private fields and `do` bindings, which are used only with classes, are not true members, because they are never part of the public interface of a type and are not declared with the `member` keyword, but they are described in this section also.
+
+## Related Topics
+
+<table class="table"><caption class="visually-hidden">Related Topics</caption>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="let-bindings-in-classes" data-linktype="relative-path">`let` Bindings in Classes</a></td>
+<td>Describes the definition of private fields and functions in classes.</td>
+</tr>
+<tr>
+<td><a href="do-bindings-in-classes" data-linktype="relative-path">`do` Bindings in Classes</a></td>
+<td>Describes the specification of object initialization code.</td>
+</tr>
+<tr>
+<td><a href="properties" data-linktype="relative-path">Properties</a></td>
+<td>Describes property members in classes and other types.</td>
+</tr>
+<tr>
+<td><a href="indexed-properties" data-linktype="relative-path">Indexed Properties</a></td>
+<td>Describes array-like properties in classes and other types.</td>
+</tr>
+<tr>
+<td><a href="methods" data-linktype="relative-path">Methods</a></td>
+<td>Describes functions that are members of a type.</td>
+</tr>
+<tr>
+<td><a href="constructors" data-linktype="relative-path">Constructors</a></td>
+<td>Describes special functions that initialize objects of a type.</td>
+</tr>
+<tr>
+<td><a href="../operator-overloading" data-linktype="relative-path">Operator Overloading</a></td>
+<td>Describes the definition of customized operators for types.</td>
+</tr>
+<tr>
+<td><a href="events" data-linktype="relative-path">Events</a></td>
+<td>Describes the definition of events and event handling support in F#.</td>
+</tr>
+<tr>
+<td><a href="explicit-fields-the-val-keyword" data-linktype="relative-path">Explicit Fields: The `val` Keyword</a></td>
+<td>Describes the definition of uninitialized fields in a type.</td>
+</tr>
+</tbody>
+</table>
+

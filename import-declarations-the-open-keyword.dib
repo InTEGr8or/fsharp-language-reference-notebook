@@ -1,0 +1,140 @@
+#!markdown
+
+# Import declarations: The open keyword
+
+An <em>import declaration</em> specifies a module or namespace whose elements you can reference without using a fully qualified name.
+
+## Syntax
+
+#!fsharp
+
+open module-or-namespace-name
+open type type-name
+
+
+#!markdown
+
+## Remarks
+
+Referencing code by using the fully qualified namespace or module path every time can create code that is hard to write, read, and maintain. Instead, you can use the `open` keyword for frequently used modules and namespaces so that when you reference a member of that module or namespace, you can use the short form of the name instead of the fully qualified name. This keyword is similar to the `using` keyword in C#, `using namespace` in Visual C++, and `Imports` in Visual Basic.
+
+The module or namespace provided must be in the same project or in a referenced project or assembly. If it is not, you can add a reference to the project, or use the `-reference` command-line option (or its abbreviation, `-r`). For more information, see <a href="compiler-options" data-linktype="relative-path">Compiler Options</a>.
+
+The import declaration makes the names available in the code that follows the declaration, up to the end of the enclosing namespace, module, or file.
+
+When you use multiple import declarations, they should appear on separate lines.
+
+The following code shows the use of the `open` keyword to simplify code.
+
+#!fsharp
+
+// Without the import declaration, you must include the full
+// path to .NET Framework namespaces such as System.IO.
+let writeToFile1 filename (text: string) =
+  let stream1 = new System.IO.FileStream(filename, System.IO.FileMode.Create)
+  let writer = new System.IO.StreamWriter(stream1)
+  writer.WriteLine(text)
+
+// Open a .NET Framework namespace.
+open System.IO
+
+// Now you do not have to include the full paths.
+let writeToFile2 filename (text: string) =
+  let stream1 = new FileStream(filename, FileMode.Create)
+  let writer = new StreamWriter(stream1)
+  writer.WriteLine(text)
+
+writeToFile2 "file1.txt" "Testing..."
+
+
+#!markdown
+
+The F# compiler does not emit an error or warning when ambiguities occur when the same name occurs in more than one open module or namespace. When ambiguities occur, F# gives preference to the more recently opened module or namespace. For example, in the following code, `empty` means `Seq.empty`, even though `empty` is located in both the `List` and `Seq` modules.
+
+#!fsharp
+
+open List
+open Seq
+printfn %"{empty}"
+
+
+#!markdown
+
+Therefore, be careful when you open modules or namespaces such as `List` or `Seq` that contain members that have identical names; instead, consider using the qualified names. You should avoid any situation in which the code is dependent upon the order of the import declarations.
+
+## Open type declarations
+
+F# supports `open` on a type like so:
+
+#!fsharp
+
+open type System.Math
+PI
+
+
+#!markdown
+
+This will expose all accessible static fields and members on the type.
+
+You can also `open` F#-defined <a href="records" data-linktype="relative-path">record</a> and <a href="discriminated-unions" data-linktype="relative-path">discriminated union</a> types to expose static members. In the case of discriminated unions, you can also expose the union cases. This can be helpful for accessing union cases in a type declared inside of a module that you may not want to open, like so:
+
+#!fsharp
+
+module M =
+    type DU = A | B | C
+
+    let someOtherFunction x = x + 1
+
+// Open only the type inside the module
+open type M.DU
+
+printfn "%A" A
+
+
+#!markdown
+
+## Namespaces That Are Open by Default
+
+Some namespaces are so frequently used in F# code that they are opened implicitly without the need of an explicit import declaration. The following table shows the namespaces that are open by default.
+
+<table class="table"><caption class="visually-hidden">Namespaces That Are Open by Default</caption>
+<thead>
+<tr>
+<th>Namespace</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`FSharp.Core`</td>
+<td>Contains basic F# type definitions for built-in types such as `int` and `float`.</td>
+</tr>
+<tr>
+<td>`FSharp.Core.Operators`</td>
+<td>Contains basic arithmetic operations such as `+` and `*`.</td>
+</tr>
+<tr>
+<td>`FSharp.Collections`</td>
+<td>Contains immutable collection classes such as `List` and `Array`.</td>
+</tr>
+<tr>
+<td>`FSharp.Control`</td>
+<td>Contains types for control constructs such as lazy evaluation and asynchronous workflows.</td>
+</tr>
+<tr>
+<td>`FSharp.Text`</td>
+<td>Contains functions for formatted IO, such as the `printf` function.</td>
+</tr>
+</tbody>
+</table>
+
+## AutoOpen Attribute
+
+You can apply the `AutoOpen` attribute to an assembly if you want to automatically open a namespace or module when the assembly is referenced. You can also apply the `AutoOpen` attribute to a module to automatically open that module when the parent module or namespace is opened. For more information, see <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-autoopenattribute.html" data-linktype="external">AutoOpenAttribute</a>.
+
+## RequireQualifiedAccess Attribute
+
+Some modules, records, or union types may specify the `RequireQualifiedAccess` attribute. When you reference elements of those modules, records, or unions, you must use a qualified name regardless of whether you include an import declaration. If you use this attribute strategically on types that define commonly used names, you help avoid name collisions and thereby make code more resilient to changes in libraries. For more information, see <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-requirequalifiedaccessattribute.html" data-linktype="external">RequireQualifiedAccessAttribute</a>.
+
+## See also
+

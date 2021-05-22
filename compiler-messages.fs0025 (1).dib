@@ -1,0 +1,61 @@
+#!markdown
+
+# FS0025: Incomplete pattern match
+
+This message is given when pattern matching is incomplete.
+
+Given the following definition:
+
+#!fsharp
+
+type Faucet =
+| Hot
+| Cold
+
+let faucet = Hot
+
+
+#!markdown
+
+And match expression:
+
+#!fsharp
+
+let incompleteFaucetString =
+    match faucet with
+    | Hot -> "Hot"
+
+
+#!markdown
+
+The compiler will yield the following message:
+
+#!fsharp
+
+FS0025: Incomplete pattern matches on this expression. For example, the value 'Cold' may indicate a case not covered by the pattern(s).
+
+
+#!markdown
+
+To resolve, you can either complete the pattern match:
+
+#!fsharp
+
+let completeFaucetString =
+    match faucet with
+    | Hot -> "Hot"
+    | Cold -> "Cold"
+
+
+#!markdown
+
+Or, introduce a wildcard, `_` (use with caution)
+
+#!fsharp
+
+let wildcardFaucetString =
+    match faucet with
+    | Hot -> "Hot"
+    | _ -> "Other"
+
+

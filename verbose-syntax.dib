@@ -1,0 +1,680 @@
+#!markdown
+
+# Verbose Syntax
+
+There are two forms of syntax available for many constructs in the F# language: <em>verbose syntax</em> and <em>lightweight syntax</em>. The verbose syntax is not as commonly used, but has the advantage of being less sensitive to indentation. The lightweight syntax is shorter and uses indentation to signal the beginning and end of constructs, rather than additional keywords like `begin`, `end`, `in`, and so on. The default syntax is the lightweight syntax. This topic describes the syntax for F# constructs when lightweight syntax is not enabled. Verbose syntax is always enabled, so even if you enable lightweight syntax, you can still use verbose syntax for some constructs. You can disable lightweight syntax by using the `#light "off"` directive.
+
+## Table of Constructs
+
+The following table shows the lightweight and verbose syntax for F# language constructs in contexts where there is a difference between the two forms. In this table, angle brackets (&lt;&gt;) enclose user-supplied syntax elements. Refer to the documentation for each language construct for more detailed information about the syntax used within these constructs.
+
+<table class="table"><caption class="visually-hidden">Table of Constructs</caption>
+<tbody><tr>
+<th>Language construct</th>
+<th>Lightweight syntax</th>
+<th>Verbose syntax</th>
+</tr>
+<tr>
+<td>
+compound expressions
+</td>
+<td>
+<div class="codeHeader" id="code-try-0" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="<expression1>
+<expression2>
+"><span>&lt;expression1&gt;
+&lt;expression2&gt;
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-1" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="<expression1>; <expression2>
+"><span>&lt;expression1&gt;; &lt;expression2&gt;
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+<p>nested `let` bindings</p>
+</td><td>
+<div class="codeHeader" id="code-try-2" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="let f x =
+    let a = 1
+    let b = 2
+    x + a + b
+"><span><span class="hljs-keyword">let</span> f x =
+    <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>
+    <span class="hljs-keyword">let</span> b = <span class="hljs-number">2</span>
+    x + a + b
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-3" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="let f x =
+    let a = 1 in
+    let b = 2 in
+    x + a + b
+"><span><span class="hljs-keyword">let</span> f x =
+    <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span> <span class="hljs-keyword">in</span>
+    <span class="hljs-keyword">let</span> b = <span class="hljs-number">2</span> <span class="hljs-keyword">in</span>
+    x + a + b
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+code block
+</td><td>
+<div class="codeHeader" id="code-try-4" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="(
+    <expression1>
+    <expression2>
+)
+"><span>(
+    &lt;expression1&gt;
+    &lt;expression2&gt;
+)
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-5" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="begin
+    <expression1>;
+    <expression2>;
+end
+"><span><span class="hljs-keyword">begin</span>
+    &lt;expression1&gt;;
+    &lt;expression2&gt;;
+<span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+`for...do`
+</td><td>
+<div class="codeHeader" id="code-try-6" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="for counter = start to finish do
+    ...
+"><span><span class="hljs-keyword">for</span> counter = start <span class="hljs-keyword">to</span> finish <span class="hljs-keyword">do</span>
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-7" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="for counter = start to finish do
+    ...
+done
+"><span><span class="hljs-keyword">for</span> counter = start <span class="hljs-keyword">to</span> finish <span class="hljs-keyword">do</span>
+    ...
+<span class="hljs-keyword">done</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+`while...do`
+</td><td>
+<div class="codeHeader" id="code-try-8" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="while <condition> do
+    ...
+"><span><span class="hljs-keyword">while</span> &lt;condition&gt; <span class="hljs-keyword">do</span>
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-9" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="while <condition> do
+    ...
+done
+"><span><span class="hljs-keyword">while</span> &lt;condition&gt; <span class="hljs-keyword">do</span>
+    ...
+<span class="hljs-keyword">done</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+`for...in`
+</td><td>
+<div class="codeHeader" id="code-try-10" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="for var in start .. finish do
+    ...
+"><span><span class="hljs-keyword">for</span> var <span class="hljs-keyword">in</span> start .. finish <span class="hljs-keyword">do</span>
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-11" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="for var in start .. finish do
+    ...
+done
+"><span><span class="hljs-keyword">for</span> var <span class="hljs-keyword">in</span> start .. finish <span class="hljs-keyword">do</span>
+    ...
+<span class="hljs-keyword">done</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>
+`do`
+</td><td>
+<div class="codeHeader" id="code-try-12" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="do
+    ...
+"><span><span class="hljs-keyword">do</span>
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-13" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="do
+    ...
+in
+"><span><span class="hljs-keyword">do</span>
+    ...
+<span class="hljs-keyword">in</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>record
+</td><td>
+<div class="codeHeader" id="code-try-14" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <record-name> =
+    {
+        <field-declarations>
+    }
+    <value-or-member-definitions>
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;record-name&gt; </span>=
+    {
+        &lt;field-declarations&gt;
+    }
+    &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-15" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <record-name> =
+    {
+        <field-declarations>
+    }
+    with
+        <value-or-member-definitions>
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;record-name&gt; </span>=
+    {
+        &lt;field-declarations&gt;
+    }
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>class
+</td><td>
+<div class="codeHeader" id="code-try-16" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <class-name>(<params>) =
+    ...
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;class-name&gt;</span>(&lt;params&gt;) =
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-17" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <class-name>(<params>) =
+    class
+        ...
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;class-name&gt;</span>(&lt;params&gt;) =
+    <span class="hljs-keyword">class</span>
+        ...
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>structure</td><td>
+<div class="codeHeader" id="code-try-18" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="[<StructAttribute>]
+type <structure-name> =
+    ...
+"><span><span class="hljs-meta">[&lt;StructAttribute&gt;]</span>
+<span class="hljs-class"><span class="hljs-keyword">type</span> &lt;structure-name&gt; </span>=
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-19" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <structure-name> =
+    struct
+        ...
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;structure-name&gt; </span>=
+    <span class="hljs-keyword">struct</span>
+        ...
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>discriminated union</td><td>
+<div class="codeHeader" id="code-try-20" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <union-name> =
+    | ...
+    | ...
+    ...
+    <value-or-member definitions>
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;union-name&gt; </span>=
+    | ...
+    | ...
+    ...
+    &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span> definitions&gt;
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-21" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <union-name> =
+    | ...
+    | ...
+    ...
+    with
+        <value-or-member-definitions>
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;union-name&gt; </span>=
+    | ...
+    | ...
+    ...
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>interface</td><td>
+<div class="codeHeader" id="code-try-22" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <interface-name> =
+    ...
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;interface-name&gt; </span>=
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-23" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <interface-name> =
+    interface
+        ...
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;interface-name&gt; </span>=
+    <span class="hljs-keyword">interface</span>
+        ...
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>object expression</td><td>
+<div class="codeHeader" id="code-try-24" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="{ new <type-name>
+    with
+        <value-or-member-definitions>
+        <interface-implementations>
+}
+"><span>{ <span class="hljs-keyword">new</span> &lt;<span class="hljs-class"><span class="hljs-keyword">type</span>-<span class="hljs-title">name</span>&gt;</span>
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+        &lt;<span class="hljs-keyword">interface</span>-implementations&gt;
+}
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-25" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="{ new <type-name>
+    with
+        <value-or-member-definitions>
+    end
+    <interface-implementations>
+}
+"><span>{ <span class="hljs-keyword">new</span> &lt;<span class="hljs-class"><span class="hljs-keyword">type</span>-<span class="hljs-title">name</span>&gt;</span>
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+    <span class="hljs-keyword">end</span>
+    &lt;<span class="hljs-keyword">interface</span>-implementations&gt;
+}
+</span>`</pre>
+</td>
+</tr>
+<tr><td>interface implementation</td><td>
+<div class="codeHeader" id="code-try-26" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="interface <interface-name>
+    with
+        <value-or-member-definitions>
+"><span><span class="hljs-keyword">interface</span> &lt;<span class="hljs-keyword">interface</span>-name&gt;
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-27" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="interface <interface-name>
+    with
+        <value-or-member-definitions>
+    end
+"><span><span class="hljs-keyword">interface</span> &lt;<span class="hljs-keyword">interface</span>-name&gt;
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>type extension</td><td>
+<div class="codeHeader" id="code-try-28" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <type-name>
+    with
+        <value-or-member-definitions>
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;type-name&gt;</span>
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-29" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="type <type-name>
+    with
+        <value-or-member-definitions>
+    end
+"><span><span class="hljs-class"><span class="hljs-keyword">type</span> &lt;type-name&gt;</span>
+    <span class="hljs-keyword">with</span>
+        &lt;value-<span class="hljs-keyword">or</span>-<span class="hljs-keyword">member</span>-definitions&gt;
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+<tr><td>module</td><td>
+<div class="codeHeader" id="code-try-30" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="module <module-name> =
+    ...
+"><span><span class="hljs-keyword">module</span> &lt;<span class="hljs-keyword">module</span>-name&gt; =
+    ...
+</span>`</pre>
+</td><td>
+<div class="codeHeader" id="code-try-31" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
+				<span class="icon">
+					<span class="docon docon-edit-copy" role="presentation"></span>
+				</span>
+				<span>Copy</span>
+				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
+					<span class="icon font-size-l">
+						<span class="docon docon-check-mark" role="presentation"></span>
+					</span>
+				</div>
+			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="module <module-name> =
+    begin
+        ...
+    end
+"><span><span class="hljs-keyword">module</span> &lt;<span class="hljs-keyword">module</span>-name&gt; =
+    <span class="hljs-keyword">begin</span>
+        ...
+    <span class="hljs-keyword">end</span>
+</span>`</pre>
+</td>
+</tr>
+</tbody></table>
+
+## See also
+

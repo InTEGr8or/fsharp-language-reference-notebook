@@ -1,0 +1,35 @@
+#!markdown
+
+# FS0052: Defensive copy
+
+In an F# project, the default `&lt;WarningLevel&gt;` is 3. This warning appears when the warning level is set to its maximum value, 5. In such a case, this code:
+
+#!fsharp
+
+System.DateTime.Now.ToString() |> printfn "%s"
+
+
+#!markdown
+
+Will yield this warning:
+
+#!fsharp
+
+The value has been copied to ensure the original is not mutated by this operation or because the copy is implicit when returning a struct from a member and another member is then accessed
+
+
+#!markdown
+
+These code snippets will not yield a warning:
+
+#!fsharp
+
+let now = System.DateTime.Now
+now.ToString() |> printfn "%s"
+
+
+#!fsharp
+
+System.DateTime.Now |> printfn "%A"
+
+

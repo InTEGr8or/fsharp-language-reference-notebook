@@ -1,0 +1,54 @@
+#!markdown
+
+# FS0037: Duplicate definition
+
+This error is emitted if an identifier is declared twice in the same scope. In this example:
+
+#!fsharp
+
+let a = 5
+let a = 6
+
+
+#!markdown
+
+The error emitted is:
+
+#!fsharp
+
+Duplicate definition of value 'a'
+
+
+#!markdown
+
+There are a number of ways to resolve this error, including:
+
+Declare different identifiers:
+
+#!fsharp
+
+let b = 5
+let c = 6
+
+
+#!markdown
+
+In case there isn't a good alternative identifier, nor is a descriptive name needed, you can append any number of `'` to the end:
+
+#!fsharp
+
+let d = 5
+let d' = 6
+let d'' = 7
+
+
+#!markdown
+
+Make the value mutable and use the assignment operator `&lt;-` to update it:
+
+#!fsharp
+
+let mutable e = 5
+e <- 6
+
+

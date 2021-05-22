@@ -1,0 +1,206 @@
+#!markdown
+
+# Literals
+
+This article provides a table that shows how to specify the type of a literal in F#.
+
+## Literal types
+
+The following table shows the literal types in F#. Characters that represent digits in hexadecimal notation are not case-sensitive; characters that identify the type are case-sensitive.
+
+<table class="table"><caption class="visually-hidden">Literal types</caption>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Suffix or prefix</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sbyte</td>
+<td>signed 8-bit integer</td>
+<td>y</td>
+<td>`86y`<br><br>`0b00000101y`</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>unsigned 8-bit natural number</td>
+<td>uy</td>
+<td>`86uy`<br><br>`0b00000101uy`</td>
+</tr>
+<tr>
+<td>int16</td>
+<td>signed 16-bit integer</td>
+<td>s</td>
+<td>`86s`</td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>unsigned 16-bit natural number</td>
+<td>us</td>
+<td>`86us`</td>
+</tr>
+<tr>
+<td>int<br><br>int32</td>
+<td>signed 32-bit integer</td>
+<td>l or none</td>
+<td>`86`<br><br>`86l`</td>
+</tr>
+<tr>
+<td>uint<br><br>uint32</td>
+<td>unsigned 32-bit natural number</td>
+<td>u or ul</td>
+<td>`86u`<br><br>`86ul`</td>
+</tr>
+<tr>
+<td>nativeint</td>
+<td>native pointer to a signed natural number</td>
+<td>n</td>
+<td>`123n`</td>
+</tr>
+<tr>
+<td>unativeint</td>
+<td>native pointer as an unsigned natural number</td>
+<td>un</td>
+<td>`0x00002D3Fun`</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>signed 64-bit integer</td>
+<td>L</td>
+<td>`86L`</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>unsigned 64-bit natural number</td>
+<td>UL</td>
+<td>`86UL`</td>
+</tr>
+<tr>
+<td>single, float32</td>
+<td>32-bit floating point number</td>
+<td>F or f</td>
+<td>`4.14F` or `4.14f`</td>
+</tr>
+<tr>
+<td aria-label="No value"></td>
+<td aria-label="No value"></td>
+<td>lf</td>
+<td>`0x00000000lf`</td>
+</tr>
+<tr>
+<td>float; double</td>
+<td>64-bit floating point number</td>
+<td>none</td>
+<td>`4.14` or `2.3E+32` or `2.3e+32`</td>
+</tr>
+<tr>
+<td aria-label="No value"></td>
+<td aria-label="No value"></td>
+<td>LF</td>
+<td>`0x0000000000000000LF`</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>integer not limited to 64-bit representation</td>
+<td>I</td>
+<td>`9999999999999999999999999999I`</td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>fractional number represented as a fixed point or rational number</td>
+<td>M or m</td>
+<td>`0.7833M` or `0.7833m`</td>
+</tr>
+<tr>
+<td>Char</td>
+<td>Unicode character</td>
+<td>none</td>
+<td>`'a'` or `'\u0061'`</td>
+</tr>
+<tr>
+<td>String</td>
+<td>Unicode string</td>
+<td>none</td>
+<td>`"text\n"`<br><br>or<br><br>`@"c:\filename"`<br><br>or<br><br>`"""&lt;book title="Paradise Lost"&gt;"""`<br><br>or<br><br>`"string1" + "string2"`<br><br>See also <a href="strings" data-linktype="relative-path">Strings</a>.</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>ASCII character</td>
+<td>B</td>
+<td>`'a'B`</td>
+</tr>
+<tr>
+<td>byte[]</td>
+<td>ASCII string</td>
+<td>B</td>
+<td>`"text"B`</td>
+</tr>
+<tr>
+<td>String or byte[]</td>
+<td>verbatim string</td>
+<td>@ prefix</td>
+<td>`@"\\server\share"` (Unicode)<br><br>`@"\\server\share"B` (ASCII)</td>
+</tr>
+</tbody>
+</table>
+
+## Named literals
+
+Values that are intended to be constants can be marked with the <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-literalattribute.html" data-linktype="external">Literal</a> attribute. This attribute has the effect of causing a value to be compiled as a constant.
+
+In pattern matching expressions, identifiers that begin with lowercase characters are always treated as variables to be bound, rather than as literals, so you should generally use initial capitals when you define literals.
+
+#!fsharp
+
+[<Literal>]
+let SomeJson = """{"numbers":[1,2,3,4,5]}"""
+
+[<Literal>]
+let Literal1 = "a" + "b"
+
+[<Literal>]
+let FileLocation =   __SOURCE_DIRECTORY__ + "/" + __SOURCE_FILE__
+
+[<Literal>]
+let Literal2 = 1 ||| 64
+
+[<Literal>]
+let Literal3 = System.IO.FileAccess.Read ||| System.IO.FileAccess.Write
+
+
+#!markdown
+
+## Remarks
+
+Unicode strings can contain explicit encodings that you can specify by using `\u` followed by a 16-bit hexadecimal code (0000 - FFFF), or UTF-32 encodings that you can specify by using `\U` followed by a 32-bit hexadecimal code that represents any Unicode code point (00000000 - 0010FFFF).
+
+The use of other bitwise operators other than `|||` isn't allowed.
+
+## Integers in other bases
+
+Signed 32-bit integers can also be specified in hexadecimal, octal, or binary using a `0x`, `0o` or `0b` prefix respectively.
+
+#!fsharp
+
+let numbers = (0x9F, 0o77, 0b1010)
+// Result: numbers : int * int * int = (159, 63, 10)
+
+
+#!markdown
+
+## Underscores in numeric literals
+
+You can separate digits with the underscore character (`_`).
+
+#!fsharp
+
+let value = 0xDEAD_BEEF
+
+let valueAsBits = 0b1101_1110_1010_1101_1011_1110_1110_1111
+
+let exampleSSN = 123_456_7890
+
+
