@@ -1,13 +1,17 @@
 #!markdown
 
+---
+title: Results
+description: Learn how to use the F# 'Result' type to help you write error-tolerant code.
+ms.date: 08/13/2020
+---
 # Results
 
-The `Result&lt;'T,'TFailure&gt;` type lets you write error-tolerant code that can be composed.
+The `Result<'T,'TFailure>` type lets you write error-tolerant code that can be composed.
 
 ## Syntax
 
 #!fsharp
-
 // The definition of Result in FSharp.Core
 [<StructuralEquality; StructuralComparison>]
 [<CompiledName("FSharpResult`2")>]
@@ -15,20 +19,17 @@ The `Result&lt;'T,'TFailure&gt;` type lets you write error-tolerant code that ca
 type Result<'T,'TError> =
     | Ok of ResultValue:'T
     | Error of ErrorValue:'TError
-
-
 #!markdown
 
 ## Remarks
 
-See the <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-resultmodule.html" data-linktype="external">`Result`</a> module for the built-in combinators for the `Result`. type.
+See the [`Result`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-resultmodule.html) module for the built-in combinators for the `Result`. type.
 
-Note that the result type is a <a href="discriminated-unions#struct-discriminated-unions" data-linktype="relative-path">struct discriminated union</a>. Structural equality semantics apply here.
+Note that the result type is a [struct discriminated union](discriminated-unions.md#struct-discriminated-unions). Structural equality semantics apply here.
 
-The `Result` type is typically used in monadic error-handling, which is often referred to as <a href="https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/recipe-part2.html" data-linktype="external">Railway-oriented Programming</a> within the F# community.  The following trivial example demonstrates this approach.
+The `Result` type is typically used in monadic error-handling, which is often referred to as [Railway-oriented Programming](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/recipe-part2.html) within the F# community.  The following trivial example demonstrates this approach.
 
 #!fsharp
-
 // Define a simple type which has fields that can be validated
 type Request =
     { Name: string
@@ -75,11 +76,11 @@ let test() =
     // Prints: "Error: No email from bananas.com is allowed."
 
 test()
-
-
 #!markdown
 
-As you can see, it's quite easy to chain together various validation functions if you force them all to return a `Result`.  This lets you break up functionality like this into small pieces which are as composable as you need them to be.  This also has the added value of <em>enforcing</em> the use of <a href="pattern-matching" data-linktype="relative-path">pattern matching</a> at the end of a round of validation, which in turns enforces a higher degree of program correctness.
+As you can see, it's quite easy to chain together various validation functions if you force them all to return a `Result`.  This lets you break up functionality like this into small pieces which are as composable as you need them to be.  This also has the added value of *enforcing* the use of [pattern matching](pattern-matching.md) at the end of a round of validation, which in turns enforces a higher degree of program correctness.
 
 ## See also
 
+- [Discriminated Unions](discriminated-unions.md)
+- [Pattern Matching](pattern-matching.md)

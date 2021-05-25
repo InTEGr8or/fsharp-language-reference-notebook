@@ -1,5 +1,10 @@
 #!markdown
 
+---
+title: Query Expressions
+description: Learn about query expression support for LINQ in the F# programming language.
+ms.date: 08/15/2020
+---
 # Query expressions
 
 Query expressions enable you to query a data source and put the data in a desired form. Query expressions provide support for LINQ in F#.
@@ -7,10 +12,7 @@ Query expressions enable you to query a data source and put the data in a desire
 ## Syntax
 
 #!fsharp
-
 query { expression }
-
-
 #!markdown
 
 ## Remarks
@@ -18,7 +20,6 @@ query { expression }
 Query expressions are a type of computation expression similar to sequence expressions. Just as you specify a sequence by providing code in a sequence expression, you specify a set of data by providing code in a query expression. In a sequence expression, the `yield` keyword identifies data to be returned as part of the resulting sequence. In query expressions, the `select` keyword performs the same function. In addition to the `select` keyword, F# also supports a number of query operators that are much like the parts of a SQL SELECT statement. Here is an example of a simple query expression, along with code that connects to the Northwind OData source.
 
 #!fsharp
-
 // Use the OData type provider to create types that can be used to access the Northwind database.
 // Add References to FSharp.Data.TypeProviders and System.Data.Services.Client
 open Microsoft.FSharp.Data.TypeProviders
@@ -36,13 +37,11 @@ let query1 =
 // Print results
 query1
 |> Seq.iter (fun customer -> printfn "Company: %s Contact: %s" customer.CompanyName customer.ContactName)
-
-
 #!markdown
 
-In the previous code example, the query expression is in curly braces. The meaning of the code in the expression is, return every customer in the Customers table in the database in the query results. Query expressions return a type that implements <a href="/en-us/dotnet/api/system.linq.iqueryable-1" data-linktype="absolute-path">IQueryable&lt;T&gt;</a> and <a href="/en-us/dotnet/api/system.collections.generic.ienumerable-1" data-linktype="absolute-path">IEnumerable&lt;T&gt;</a>, and so they can be iterated using the <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-seqmodule.html" data-linktype="external">Seq module</a> as the example shows.
+In the previous code example, the query expression is in curly braces. The meaning of the code in the expression is, return every customer in the Customers table in the database in the query results. Query expressions return a type that implements <xref:System.Linq.IQueryable%601> and <xref:System.Collections.Generic.IEnumerable%601>, and so they can be iterated using the [Seq module](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-seqmodule.html) as the example shows.
 
-Every computation expression type is built from a builder class. The builder class for the query computation expression is `QueryBuilder`. For more information, see <a href="computation-expressions" data-linktype="relative-path">Computation Expressions</a> and <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-linq-querybuilder.html" data-linktype="external">QueryBuilder Class</a>.
+Every computation expression type is built from a builder class. The builder class for the query computation expression is `QueryBuilder`. For more information, see [Computation Expressions](computation-expressions.md) and [QueryBuilder Class](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-linq-querybuilder.html).
 
 ## Query Operators
 
@@ -54,12 +53,11 @@ Table 1 shows available query operators. In addition, see Table2, which compares
 
 This table assumes a database in the following form:
 
-<img src="media/query-expressions/student-course-database.png" alt="Diagram that shows a sample database." data-linktype="relative-path">
+![Diagram that shows a sample database.](./media/query-expressions/student-course-database.png)
 
 The code in the tables that follow also assumes the following database connection code. Projects should add references to System.Data,  System.Data.Linq, and FSharp.Data.TypeProviders assemblies. The code that creates this database is included at the end of this topic.
 
 #!fsharp
-
 open System
 open Microsoft.FSharp.Data.TypeProviders
 open System.Data.Linq.SqlClient
@@ -72,451 +70,208 @@ let db = schema.GetDataContext()
 
 // Needed for some query operator examples:
 let data = [ 1; 5; 7; 11; 18; 21]
+#!markdown
 
+### Table 1. Query Operators
 
-<table class="table"><caption class="visually-hidden">Table 1. Query Operators</caption>
-  <tbody><tr>
+<table style="width:100%">
+  <tr>
     <th>Operator</th>
     <th>Description</th>
   </tr>
   <tr>
-  <td>`contains`</td>
-<td>Determines whether the selected elements include a specified element.<br><br>
-<div class="codeHeader" id="code-try-3" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+  <td><code>contains</code></td>
+<td>Determines whether the selected elements include a specified element.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     select student.Age.Value
     contains 11
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student.Age.Value
-    contains <span class="hljs-number">11</span>
-}
-</span>`</pre>
+</code></pre>
+
 </td>
 </tr>
+
 <tr>
-  <td>`count`</td><td>Returns the number of selected elements.<br><br>
-<div class="codeHeader" id="code-try-4" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+  <td><code>count</code></td><td>Returns the number of selected elements.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     select student
     count
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student
-    count
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr>
 <tr>
-<td>`last`</td><td>Selects the last element of those selected so far.<br><br>
-<div class="codeHeader" id="code-try-5" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>last</code></td><td>Selects the last element of those selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for number in data do
     last
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> number <span class="hljs-keyword">in</span> data <span class="hljs-keyword">do</span>
-    last
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr>
 <tr>
-<td>`lastOrDefault`</td><td>Selects the last element of those selected so far, or a default value if no element is found.<br><br>
-<div class="codeHeader" id="code-try-6" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>lastOrDefault</code></td><td>Selects the last element of those selected so far, or a default value if no element is found.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for number in data do
-    where (number < 0)
+    where (number &lt; 0)
     lastOrDefault
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> number <span class="hljs-keyword">in</span> data <span class="hljs-keyword">do</span>
-    where (number &lt; <span class="hljs-number">0</span>)
-    lastOrDefault
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`exactlyOne`</td><td>Selects the single, specific element selected so far. If multiple elements are present, an exception is thrown.<br><br>
-<div class="codeHeader" id="code-try-7" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>exactlyOne</code></td><td>Selects the single, specific element selected so far. If multiple elements are present, an exception is thrown.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where (student.StudentID = 1)
     select student
     exactlyOne
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.StudentID = <span class="hljs-number">1</span>)
-    select student
-    exactlyOne
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`exactlyOneOrDefault`</td><td>Selects the single, specific element of those selected so far, or a default value if that element is not found.<br><br>
-<div class="codeHeader" id="code-try-8" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>exactlyOneOrDefault</code></td><td>Selects the single, specific element of those selected so far, or a default value if that element is not found.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where (student.StudentID = 1)
     select student
     exactlyOneOrDefault
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.StudentID = <span class="hljs-number">1</span>)
-    select student
-    exactlyOneOrDefault
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`headOrDefault`</td><td>Selects the first element of those selected so far, or a default value if the sequence contains no elements.<br><br>
-<div class="codeHeader" id="code-try-9" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>headOrDefault</code></td><td>Selects the first element of those selected so far, or a default value if the sequence contains no elements.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     select student
     headOrDefault
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student
-    headOrDefault
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`select`</td><td>Projects each of the elements selected so far.<br><br>
-<div class="codeHeader" id="code-try-10" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>select</code></td><td>Projects each of the elements selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`where`</td><td>Selects elements based on a specified predicate.<br><br>
-<div class="codeHeader" id="code-try-11" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>where</code></td><td>Selects elements based on a specified predicate.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where (student.StudentID > 4)
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.StudentID &gt; <span class="hljs-number">4</span>)
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`minBy`</td><td>Selects a value for each element selected so far and returns the minimum resulting value.<br><br>
-<div class="codeHeader" id="code-try-12" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>minBy</code></td><td>Selects a value for each element selected so far and returns the minimum resulting value.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     minBy student.StudentID
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    minBy student.StudentID
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`maxBy`</td><td>Selects a value for each element selected so far and returns the maximum resulting value.<br><br>
-<div class="codeHeader" id="code-try-13" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>maxBy</code></td><td>Selects a value for each element selected so far and returns the maximum resulting value.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     maxBy student.StudentID
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    maxBy student.StudentID
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`groupBy`</td><td>Groups the elements selected so far according to a specified key selector.<br><br>
-<div class="codeHeader" id="code-try-14" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>groupBy</code></td><td>Groups the elements selected so far according to a specified key selector.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     groupBy student.Age into g
     select (g.Key, g.Count())
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy student.Age into g
-    select (g.Key, g.Count())
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sortBy`</td><td>Sorts the elements selected so far in ascending order by the given sorting key.<br><br>
-<div class="codeHeader" id="code-try-15" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sortBy</code></td><td>Sorts the elements selected so far in ascending order by the given sorting key.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortBy student.Name
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortBy student.Name
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sortByDescending`</td><td>Sorts the elements selected so far in descending order by the given sorting key.<br><br>
-<div class="codeHeader" id="code-try-16" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sortByDescending</code></td><td>Sorts the elements selected so far in descending order by the given sorting key.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortByDescending student.Name
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortByDescending student.Name
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`thenBy`</td><td>Performs a subsequent ordering of the elements selected so far in ascending order by the given sorting key. This operator may only be used after a `sortBy`, `sortByDescending`, `thenBy`, or `thenByDescending`.<br><br>
-<div class="codeHeader" id="code-try-17" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>thenBy</code></td><td>Performs a subsequent ordering of the elements selected so far in ascending order by the given sorting key. This operator may only be used after a <code>sortBy</code>, <code>sortByDescending</code>, <code>thenBy</code>, or <code>thenByDescending</code>.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where student.Age.HasValue
     sortBy student.Age.Value
     thenBy student.Name
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where student.Age.HasValue
-    sortBy student.Age.Value
-    thenBy student.Name
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`thenByDescending`</td><td>Performs a subsequent ordering of the elements selected so far in descending order by the given sorting key. This operator may only be used after a `sortBy`, `sortByDescending`, `thenBy`, or `thenByDescending`.<br><br>
-<div class="codeHeader" id="code-try-18" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>thenByDescending</code></td><td>Performs a subsequent ordering of the elements selected so far in descending order by the given sorting key. This operator may only be used after a <code>sortBy</code>, <code>sortByDescending</code>, <code>thenBy</code>, or <code>thenByDescending</code>.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where student.Age.HasValue
     sortBy student.Age.Value
     thenByDescending student.Name
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where student.Age.HasValue
-    sortBy student.Age.Value
-    thenByDescending student.Name
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`groupValBy`</td><td>Selects a value for each element selected so far and groups the elements by the given key.<br><br>
-<div class="codeHeader" id="code-try-19" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>groupValBy</code></td><td>Selects a value for each element selected so far and groups the elements by the given key.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     groupValBy student.Name student.Age into g
     select (g, g.Key, g.Count())
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupValBy student.Name student.Age into g
-    select (g, g.Key, g.Count())
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`join`</td><td>Correlates two sets of selected values based on matching keys. Note that the order of the keys around the = sign in a join expression is significant. In all joins, if the line is split after the `-&gt;` symbol, the indentation must be indented at least as far as the keyword `for`.<br><br>
-<div class="codeHeader" id="code-try-20" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>join</code></td><td>Correlates two sets of selected values based on matching keys. Note that the order of the keys around the = sign in a join expression is significant. In all joins, if the line is split after the <code>-&gt;</code> symbol, the indentation must be indented at least as far as the keyword <code>for</code>.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     join selection in db.CourseSelection
         on (student.StudentID = selection.StudentID)
     select (student, selection)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID)
-    select (student, selection)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`groupJoin`</td><td>Correlates two sets of selected values based on matching keys and groups the results. Note that the order of the keys around the = sign in a join expression is significant.<br><br>
-<div class="codeHeader" id="code-try-21" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>groupJoin</code></td><td>Correlates two sets of selected values based on matching keys and groups the results. Note that the order of the keys around the = sign in a join expression is significant.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     groupJoin courseSelection in db.CourseSelection
         on (student.StudentID = courseSelection.StudentID) into g
@@ -525,186 +280,80 @@ let data = [ 1; 5; 7; 11; 18; 21]
         on (courseSelection.CourseID = course.CourseID)
     select (student.Name, course.CourseName)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupJoin courseSelection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = courseSelection.StudentID) into g
-    <span class="hljs-keyword">for</span> courseSelection <span class="hljs-keyword">in</span> g <span class="hljs-keyword">do</span>
-    join course <span class="hljs-keyword">in</span> db.Course
-        on (courseSelection.CourseID = course.CourseID)
-    select (student.Name, course.CourseName)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`leftOuterJoin`</td><td>Correlates two sets of selected values based on matching keys and groups the results. If any group is empty, a group with a single default value is used instead. Note that the order of the keys around the = sign in a join expression is significant.<br><br>
-<div class="codeHeader" id="code-try-22" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>leftOuterJoin</code></td><td>Correlates two sets of selected values based on matching keys and groups the results. If any group is empty, a group with a single default value is used instead. Note that the order of the keys around the = sign in a join expression is significant.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     leftOuterJoin selection in db.CourseSelection
         on (student.StudentID = selection.StudentID) into result
     for selection in result.DefaultIfEmpty() do
     select (student, selection)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    leftOuterJoin selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID) into result
-    <span class="hljs-keyword">for</span> selection <span class="hljs-keyword">in</span> result.DefaultIfEmpty() <span class="hljs-keyword">do</span>
-    select (student, selection)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sumByNullable`</td><td>Selects a nullable value for each element selected so far and returns the sum of these values. If any nullable does not have a value, it is ignored.<br><br>
-<div class="codeHeader" id="code-try-23" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sumByNullable</code></td><td>Selects a nullable value for each element selected so far and returns the sum of these values. If any nullable does not have a value, it is ignored.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sumByNullable student.Age
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sumByNullable student.Age
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`minByNullable`</td><td>Selects a nullable value for each element selected so far and returns the minimum of these values. If any nullable does not have a value, it is ignored.<br><br>
-<div class="codeHeader" id="code-try-24" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>minByNullable</code></td><td>Selects a nullable value for each element selected so far and returns the minimum of these values. If any nullable does not have a value, it is ignored.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     minByNullable student.Age
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    minByNullable student.Age
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`maxByNullable`</td><td>Selects a nullable value for each element selected so far and returns the maximum of these values. If any nullable does not have a value, it is ignored.<br><br>
-<div class="codeHeader" id="code-try-25" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>maxByNullable</code></td><td>Selects a nullable value for each element selected so far and returns the maximum of these values. If any nullable does not have a value, it is ignored.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     maxByNullable student.Age
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    maxByNullable student.Age
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`averageByNullable`</td><td>Selects a nullable value for each element selected so far and returns the average of these values. If any nullable does not have a value, it is ignored.<br><br>
-<div class="codeHeader" id="code-try-26" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>averageByNullable</code></td><td>Selects a nullable value for each element selected so far and returns the average of these values. If any nullable does not have a value, it is ignored.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     averageByNullable (Nullable.float student.Age)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    averageByNullable (Nullable.float student.Age)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`averageBy`</td><td>Selects a value for each element selected so far and returns the average of these values.<br><br>
-<div class="codeHeader" id="code-try-27" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>averageBy</code></td><td>Selects a value for each element selected so far and returns the average of these values.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     averageBy (float student.StudentID)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    averageBy (float student.StudentID)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`distinct`</td><td>Selects distinct elements from the elements selected so far.<br><br>
-<div class="codeHeader" id="code-try-28" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>distinct</code></td><td>Selects distinct elements from the elements selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     join selection in db.CourseSelection
         on (student.StudentID = selection.StudentID)
     distinct
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID)
-    distinct
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`exists`</td><td>Determines whether any element selected so far satisfies a condition.<br><br>
-<div class="codeHeader" id="code-try-29" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>exists</code></td><td>Determines whether any element selected so far satisfies a condition.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     where
         (query {
@@ -712,429 +361,194 @@ let data = [ 1; 5; 7; 11; 18; 21]
             exists (courseSelection.StudentID = student.StudentID) })
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where
-        (query {
-            <span class="hljs-keyword">for</span> courseSelection <span class="hljs-keyword">in</span> db.CourseSelection <span class="hljs-keyword">do</span>
-            exists (courseSelection.StudentID = student.StudentID) })
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`find`</td><td>Selects the first element selected so far that satisfies a specified condition.<br><br>
-<div class="codeHeader" id="code-try-30" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>find</code></td><td>Selects the first element selected so far that satisfies a specified condition.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
-    find (student.Name = &quot;Abercrombie, Kim&quot;)
+    find (student.Name = "Abercrombie, Kim")
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    find (student.Name = <span class="hljs-string">"Abercrombie, Kim"</span>)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`all`</td><td>Determines whether all elements selected so far satisfy a condition.<br><br>
-<div class="codeHeader" id="code-try-31" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>all</code></td><td>Determines whether all elements selected so far satisfy a condition.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
-    all (SqlMethods.Like(student.Name, &quot;%,%&quot;))
+    all (SqlMethods.Like(student.Name, "%,%"))
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    all (SqlMethods.Like(student.Name, <span class="hljs-string">"%,%"</span>))
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`head`</td><td>Selects the first element from those selected so far.<br><br>
-<div class="codeHeader" id="code-try-32" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>head</code></td><td>Selects the first element from those selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     head
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    head
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`nth`</td><td>Selects the element at a specified index amongst those selected so far.<br><br>
-<div class="codeHeader" id="code-try-33" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>nth</code></td><td>Selects the element at a specified index amongst those selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for numbers in data do
     nth 3
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> numbers <span class="hljs-keyword">in</span> data <span class="hljs-keyword">do</span>
-    nth <span class="hljs-number">3</span>
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`skip`</td><td>Bypasses a specified number of the elements selected so far and then selects the remaining elements.<br><br>
-<div class="codeHeader" id="code-try-34" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>skip</code></td><td>Bypasses a specified number of the elements selected so far and then selects the remaining elements.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     skip 1
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    skip <span class="hljs-number">1</span>
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`skipWhile`</td><td>Bypasses elements in a sequence as long as a specified condition is true and then selects the remaining elements.<br><br>
-<div class="codeHeader" id="code-try-35" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>skipWhile</code></td><td>Bypasses elements in a sequence as long as a specified condition is true and then selects the remaining elements.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for number in data do
-    skipWhile (number < 3)
+    skipWhile (number &lt; 3)
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> number <span class="hljs-keyword">in</span> data <span class="hljs-keyword">do</span>
-    skipWhile (number &lt; <span class="hljs-number">3</span>)
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sumBy`</td><td>Selects a value for each element selected so far and returns the sum of these values.<br><br>
-<div class="codeHeader" id="code-try-36" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sumBy</code></td><td>Selects a value for each element selected so far and returns the sum of these values.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sumBy student.StudentID
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sumBy student.StudentID
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`take`</td><td>Selects a specified number of contiguous elements from those selected so far.<br><br>
-<div class="codeHeader" id="code-try-37" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>take</code></td><td>Selects a specified number of contiguous elements from those selected so far.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     select student
     take 2
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student
-    take <span class="hljs-number">2</span>
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`takeWhile`</td><td>Selects elements from a sequence as long as a specified condition is true, and then skips the remaining elements.<br><br>
-<div class="codeHeader" id="code-try-38" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>takeWhile</code></td><td>Selects elements from a sequence as long as a specified condition is true, and then skips the remaining elements.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for number in data do
-    takeWhile (number < 10)
+    takeWhile (number &lt; 10)
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> number <span class="hljs-keyword">in</span> data <span class="hljs-keyword">do</span>
-    takeWhile (number &lt; <span class="hljs-number">10</span>)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sortByNullable`</td><td>Sorts the elements selected so far in ascending order by the given nullable sorting key.<br><br>
-<div class="codeHeader" id="code-try-39" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sortByNullable</code></td><td>Sorts the elements selected so far in ascending order by the given nullable sorting key.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortByNullable student.Age
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortByNullable student.Age
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`sortByNullableDescending`</td><td>Sorts the elements selected so far in descending order by the given nullable sorting key.<br><br>
-<div class="codeHeader" id="code-try-40" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>sortByNullableDescending</code></td><td>Sorts the elements selected so far in descending order by the given nullable sorting key.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortByNullableDescending student.Age
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortByNullableDescending student.Age
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`thenByNullable`</td><td>Performs a subsequent ordering of the elements selected so far in ascending order by the given nullable sorting key. This operator may only be used immediately after a `sortBy`, `sortByDescending`, `thenBy`, or `thenByDescending`, or their nullable variants.<br><br>
-<div class="codeHeader" id="code-try-41" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>thenByNullable</code></td><td>Performs a subsequent ordering of the elements selected so far in ascending order by the given nullable sorting key. This operator may only be used immediately after a <code>sortBy</code>, <code>sortByDescending</code>, <code>thenBy</code>, or <code>thenByDescending</code>, or their nullable variants.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortBy student.Name
     thenByNullable student.Age
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortBy student.Name
-    thenByNullable student.Age
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`thenByNullableDescending`</td><td>Performs a subsequent ordering of the elements selected so far in descending order by the given nullable sorting key. This operator may only be used immediately after a `sortBy`, `sortByDescending`, `thenBy`, or `thenByDescending`, or their nullable variants.<br><br>
-<div class="codeHeader" id="code-try-42" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+<td><code>thenByNullableDescending</code></td><td>Performs a subsequent ordering of the elements selected so far in descending order by the given nullable sorting key. This operator may only be used immediately after a <code>sortBy</code>, <code>sortByDescending</code>, <code>thenBy</code>, or <code>thenByDescending</code>, or their nullable variants.<br/><br/>
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
     sortBy student.Name
     thenByNullableDescending student.Age
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    sortBy student.Name
-    thenByNullableDescending student.Age
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr>
-</tbody></table>
+</table>
 
 ## Comparison of Transact-SQL and F# Query Expressions
 
 The following table shows some common Transact-SQL queries and their equivalents in F#. The code in this table also assumes the same database as the previous table and the same initial code to set up the type provider.
 
-<table class="table"><caption class="visually-hidden">Table 2. Transact-SQL and F# Query Expressions</caption>
-  <tbody><tr>
+### Table 2. Transact-SQL and F# Query Expressions
+
+<table style="width:100%">
+  <tr>
     <th>Transact-SQL (not case sensitive)</th>
     <th>F# Query Expression (case sensitive)</th>
   </tr>
 <tr><td>
 Select all fields from table.<br>
-<div class="codeHeader" id="code-try-43" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-</span>`</pre>
+
+<pre><code class="lang-sql">SELECT * FROM Student
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-44" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// All students.
+<pre><code class="lang-fsharp">// All students.
 query {
     for student in db.Student do
     select student
 }
-"><span><span class="hljs-comment">// All students.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr>
 <tr><td>
-Count records in a table.<br>
-<div class="codeHeader" id="code-try-45" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT COUNT( * ) FROM Student
-"><span><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">COUNT</span>( * ) <span class="hljs-keyword">FROM</span> Student
-</span>`</pre>
+Count records in a table.<br/>
+
+<pre><code class="lang-sql">SELECT COUNT( * ) FROM Student
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-46" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Count of students.
+
+<pre><code class="lang-fsharp">// Count of students.
 query {
     for student in db.Student do
     count
 }
-"><span><span class="hljs-comment">// Count of students.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    count
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>`EXISTS`
-<br>
+<td><code>EXISTS</code>
+<br />
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-space-in-emphasis -->
-<div class="codeHeader" id="code-try-47" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+<pre><code class="lang-sql">SELECT * FROM Student
 WHERE EXISTS
   (SELECT * FROM CourseSelection
    WHERE CourseSelection.StudentID = Student.StudentID)
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">EXISTS</span>
-  (<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> CourseSelection
-   <span class="hljs-keyword">WHERE</span> CourseSelection.StudentID = Student.StudentID)
-</span>`</pre>
+</code></pre>
 <!-- markdownlint-restore -->
 </td>
+
 <td>
-<div class="codeHeader" id="code-try-48" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Find students who have signed up at least one course.
+
+<pre><code class="lang-fsharp">// Find students who have signed up at least one course.
 query {
     for student in db.Student do
     where
@@ -1143,45 +557,18 @@ query {
             exists (courseSelection.StudentID = student.StudentID) })
     select student
 }
-"><span><span class="hljs-comment">// Find students who have signed up at least one course.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where
-        (query {
-            <span class="hljs-keyword">for</span> courseSelection <span class="hljs-keyword">in</span> db.CourseSelection <span class="hljs-keyword">do</span>
-            exists (courseSelection.StudentID = student.StudentID) })
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr>
-<td>Grouping<br>
-<div class="codeHeader" id="code-try-49" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Age, COUNT( * ) FROM Student
+<td>Grouping<br/>
+
+<pre><code class="lang-sql">SELECT Student.Age, COUNT( * ) FROM Student
 GROUP BY Student.Age
-"><span><span class="hljs-keyword">SELECT</span> Student.Age, <span class="hljs-keyword">COUNT</span>( * ) <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Student.Age
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-50" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Group by age and count.
+
+<pre><code class="lang-fsharp">// Group by age and count.
 query {
     for n in db.Student do
     groupBy n.Age into g
@@ -1193,102 +580,42 @@ query {
     groupValBy n.Age n.Age into g
     select (g.Key, g.Count())
 }
-"><span><span class="hljs-comment">// Group by age and count.</span>
-query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy n.Age into g
-    select (g.Key, g.Count())
-}
-<span class="hljs-comment">// OR</span>
-query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupValBy n.Age n.Age into g
-    select (g.Key, g.Count())
-}
-</span>`</pre>
+</code></pre>
 </td></tr><tr><td>
-Grouping with condition.<br>
-<div class="codeHeader" id="code-try-51" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Age, COUNT( * )
+Grouping with condition.<br/>
+
+<pre><code class="lang-sql">SELECT Student.Age, COUNT( * )
 FROM Student
 GROUP BY Student.Age
 HAVING student.Age > 10
-"><span><span class="hljs-keyword">SELECT</span> Student.Age, <span class="hljs-keyword">COUNT</span>( * )
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Student.Age
-<span class="hljs-keyword">HAVING</span> student.Age &gt; <span class="hljs-number">10</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-52" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Group students by age where age > 10.
+
+<pre><code class="lang-fsharp">// Group students by age where age > 10.
 query {
     for student in db.Student do
     groupBy student.Age into g
-    where (g.Key.HasValue &amp;&amp; g.Key.Value > 10)
+    where (g.Key.HasValue && g.Key.Value > 10)
     select (g.Key, g.Count())
 }
-"><span><span class="hljs-comment">// Group students by age where age &gt; 10.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy student.Age into g
-    where (g.Key.HasValue &amp;&amp; g.Key.Value &gt; <span class="hljs-number">10</span>)
-    select (g.Key, g.Count())
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-Grouping with count condition.<br>
+Grouping with count condition.<br/>
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-space-in-emphasis -->
-<div class="codeHeader" id="code-try-53" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Age, COUNT( * )
+<pre><code class="lang-sql">SELECT Student.Age, COUNT( * )
 FROM Student
 GROUP BY Student.Age
 HAVING COUNT( * ) > 1
-"><span><span class="hljs-keyword">SELECT</span> Student.Age, <span class="hljs-keyword">COUNT</span>( * )
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Student.Age
-<span class="hljs-keyword">HAVING</span> <span class="hljs-keyword">COUNT</span>( * ) &gt; <span class="hljs-number">1</span>
-</span>`</pre>
+</code></pre>
 <!-- markdownlint-restore -->
+
 </td><td>
-<div class="codeHeader" id="code-try-54" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Group students by age and count number of students
+
+<pre><code class="lang-fsharp">// Group students by age and count number of students
 // at each age with more than 1 student.
 query {
     for student in db.Student do
@@ -1296,46 +623,19 @@ query {
     where (group.Count() > 1)
     select (group.Key, group.Count())
 }
-"><span><span class="hljs-comment">// Group students by age and count number of students</span>
-<span class="hljs-comment">// at each age with more than 1 student.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy student.Age into group
-    where (group.Count() &gt; <span class="hljs-number">1</span>)
-    select (group.Key, group.Count())
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-Grouping, counting, and summing.<br>
-<div class="codeHeader" id="code-try-55" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Age, COUNT( * ), SUM(Student.Age) as total
+Grouping, counting, and summing.<br/>
+
+<pre><code class="lang-sql">SELECT Student.Age, COUNT( * ), SUM(Student.Age) as total
 FROM Student
 GROUP BY Student.Age
-"><span><span class="hljs-keyword">SELECT</span> Student.Age, <span class="hljs-keyword">COUNT</span>( * ), <span class="hljs-keyword">SUM</span>(Student.Age) <span class="hljs-keyword">as</span> total
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Student.Age
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-56" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Group students by age and sum ages.
+
+<pre><code class="lang-fsharp">// Group students by age and sum ages.
 query {
     for student in db.Student do
     groupBy student.Age into g
@@ -1346,56 +646,24 @@ query {
         }
     select (g.Key, g.Count(), total)
 }
-"><span><span class="hljs-comment">// Group students by age and sum ages.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy student.Age into g
-    <span class="hljs-keyword">let</span> total =
-        query {
-            <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> g <span class="hljs-keyword">do</span>
-            sumByNullable student.Age
-        }
-    select (g.Key, g.Count(), total)
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-Grouping, counting, and ordering by count.<br>
+Grouping, counting, and ordering by count.<br/>
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-space-in-emphasis -->
-<div class="codeHeader" id="code-try-57" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Age, COUNT( * ) as myCount
+<pre><code class="lang-sql">SELECT Student.Age, COUNT( * ) as myCount
 FROM Student
 GROUP BY Student.Age
 HAVING COUNT( * ) > 1
 ORDER BY COUNT( * ) DESC
-"><span><span class="hljs-keyword">SELECT</span> Student.Age, <span class="hljs-keyword">COUNT</span>( * ) <span class="hljs-keyword">as</span> myCount
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> Student.Age
-<span class="hljs-keyword">HAVING</span> <span class="hljs-keyword">COUNT</span>( * ) &gt; <span class="hljs-number">1</span>
-<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">COUNT</span>( * ) <span class="hljs-keyword">DESC</span>
-</span>`</pre>
+</code></pre>
 <!-- markdownlint-restore -->
+
 </td><td>
-<div class="codeHeader" id="code-try-58" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Group students by age, count number of students
+
+<pre><code class="lang-fsharp">// Group students by age, count number of students
 // at each age, and display all with count > 1
 // in descending order of count.
 query {
@@ -1405,48 +673,19 @@ query {
     sortByDescending (g.Count())
     select (g.Key, g.Count())
 }
-"><span><span class="hljs-comment">// Group students by age, count number of students</span>
-<span class="hljs-comment">// at each age, and display all with count &gt; 1</span>
-<span class="hljs-comment">// in descending order of count.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    groupBy student.Age into g
-    where (g.Count() &gt; <span class="hljs-number">1</span>)
-    sortByDescending (g.Count())
-    select (g.Key, g.Count())
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-`IN` a set of specified values<br>
-<div class="codeHeader" id="code-try-59" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT *
+<code>IN</code> a set of specified values<br/>
+
+<pre><code class="lang-sql">SELECT *
 FROM Student
 WHERE Student.StudentID IN (1, 2, 5, 10)
-"><span><span class="hljs-keyword">SELECT</span> *
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.StudentID <span class="hljs-keyword">IN</span> (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>)
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-60" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Select students where studentID is one of a given list.
+
+<pre><code class="lang-fsharp">// Select students where studentID is one of a given list.
 let idQuery =
     query {
         for id in [1; 2; 5; 10] do
@@ -1457,305 +696,123 @@ query {
     where (idQuery.Contains(student.StudentID))
     select student
 }
-"><span><span class="hljs-comment">// Select students where studentID is one of a given list.</span>
-<span class="hljs-keyword">let</span> idQuery =
-    query {
-        <span class="hljs-keyword">for</span> id <span class="hljs-keyword">in</span> [<span class="hljs-number">1</span>; <span class="hljs-number">2</span>; <span class="hljs-number">5</span>; <span class="hljs-number">10</span>] <span class="hljs-keyword">do</span>
-        select id
-    }
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (idQuery.Contains(student.StudentID))
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-`LIKE` and `TOP`.<br>
-<div class="codeHeader" id="code-try-61" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="-- '_e%' matches strings where the second character is 'e'
+<code>LIKE</code> and <code>TOP</code>.<br/>
+
+<pre><code class="lang-sql">-- '_e%' matches strings where the second character is 'e'
 SELECT TOP 2 * FROM Student
 WHERE Student.Name LIKE '_e%'
-"><span><span class="hljs-comment">-- '_e%' matches strings where the second character is 'e'</span>
-<span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">2</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'_e%'</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-62" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Look for students with Name match _e% pattern and take first two.
+<pre><code class="lang-fsharp">// Look for students with Name match _e% pattern and take first two.
 query {
     for student in db.Student do
-    where (SqlMethods.Like( student.Name, &quot;_e%&quot;) )
+    where (SqlMethods.Like( student.Name, "_e%") )
     select student
     take 2
 }
-"><span><span class="hljs-comment">// Look for students with Name match _e% pattern and take first two.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (SqlMethods.Like( student.Name, <span class="hljs-string">"_e%"</span>) )
-    select student
-    take <span class="hljs-number">2</span>
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-`LIKE` with pattern match set.<br>
-<div class="codeHeader" id="code-try-63" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="-- '[abc]%' matches strings where the first character is
+<code>LIKE</code> with pattern match set.<br/>
+
+<pre><code class="lang-sql">-- '[abc]%' matches strings where the first character is
 -- 'a', 'b', 'c', 'A', 'B', or 'C'
 SELECT * FROM Student
 WHERE Student.Name LIKE '[abc]%'
-"><span><span class="hljs-comment">-- '[abc]%' matches strings where the first character is</span>
-<span class="hljs-comment">-- 'a', 'b', 'c', 'A', 'B', or 'C'</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'[abc]%'</span>
-</span>`</pre>
+</code></pre>
 </td><td>
-<div class="codeHeader" id="code-try-64" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+
+<pre><code class="lang-fsharp">query {
     for student in db.Student do
-    where (SqlMethods.Like( student.Name, &quot;[abc]%&quot;) )
+    where (SqlMethods.Like( student.Name, "[abc]%") )
     select student
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (SqlMethods.Like( student.Name, <span class="hljs-string">"[abc]%"</span>) )
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-`LIKE` with set exclusion pattern.<br>
-<div class="codeHeader" id="code-try-65" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="-- '[^abc]%' matches strings where the first character is
+<code>LIKE</code> with set exclusion pattern.<br/>
+
+<pre><code class="lang-sql">-- '[^abc]%' matches strings where the first character is
 -- not 'a', 'b', 'c', 'A', 'B', or 'C'
 SELECT * FROM Student
 WHERE Student.Name LIKE '[^abc]%'
-"><span><span class="hljs-comment">-- '[^abc]%' matches strings where the first character is</span>
-<span class="hljs-comment">-- not 'a', 'b', 'c', 'A', 'B', or 'C'</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'[^abc]%'</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-66" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Look for students with name matching [^abc]%% pattern.
+
+<pre><code class="lang-fsharp">// Look for students with name matching [^abc]%% pattern.
 query {
     for student in db.Student do
-    where (SqlMethods.Like( student.Name, &quot;[^abc]%&quot;) )
+    where (SqlMethods.Like( student.Name, "[^abc]%") )
     select student
 }
-"><span><span class="hljs-comment">// Look for students with name matching [^abc]%% pattern.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (SqlMethods.Like( student.Name, <span class="hljs-string">"[^abc]%"</span>) )
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-`LIKE` on one field, but select a different field.<br>
-<div class="codeHeader" id="code-try-67" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT StudentID AS ID FROM Student
+<code>LIKE</code> on one field, but select a different field.<br/>
+
+<pre><code class="lang-sql">SELECT StudentID AS ID FROM Student
 WHERE Student.Name LIKE '[^abc]%'
-"><span><span class="hljs-keyword">SELECT</span> StudentID <span class="hljs-keyword">AS</span> <span class="hljs-keyword">ID</span> <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'[^abc]%'</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-68" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="query {
+
+<pre><code class="lang-fsharp">query {
     for n in db.Student do
-    where (SqlMethods.Like( n.Name, &quot;[^abc]%&quot;) )
+    where (SqlMethods.Like( n.Name, "[^abc]%") )
     select n.StudentID
 }
-"><span>query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (SqlMethods.Like( n.Name, <span class="hljs-string">"[^abc]%"</span>) )
-    select n.StudentID
-}
-</span>`</pre>
-</td></tr><tr><td>`LIKE`, with substring search.<br>
-<div class="codeHeader" id="code-try-69" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>LIKE</code>, with substring search.<br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 WHERE Student.Name like '%A%'
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Name <span class="hljs-keyword">like</span> <span class="hljs-string">'%A%'</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-70" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Using Contains as a query filter.
+
+<pre><code class="lang-fsharp">// Using Contains as a query filter.
 query {
     for student in db.Student do
-    where (student.Name.Contains(&quot;a&quot;))
+    where (student.Name.Contains("a"))
     select student
 }
-"><span><span class="hljs-comment">// Using Contains as a query filter.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.Name.Contains(<span class="hljs-string">"a"</span>))
-    select student
-}
-</span>`</pre>
+</code></pre>
+
 </td></tr><tr><td>
-Simple `JOIN` with two tables.<br>
-<div class="codeHeader" id="code-try-71" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+Simple <code>JOIN</code> with two tables.<br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 JOIN CourseSelection
 ON Student.StudentID = CourseSelection.StudentID
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">JOIN</span> CourseSelection
-<span class="hljs-keyword">ON</span> Student.StudentID = CourseSelection.StudentID
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-72" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Join Student and CourseSelection tables.
+
+<pre><code class="lang-fsharp">// Join Student and CourseSelection tables.
 query {
     for student in db.Student do
     join selection in db.CourseSelection
         on (student.StudentID = selection.StudentID)
     select (student, selection)
 }
-"><span><span class="hljs-comment">// Join Student and CourseSelection tables.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID)
-    select (student, selection)
-}
-</span>`</pre>
-</td></tr><tr><td>`LEFT JOIN` with two tables.<br>
-<div class="codeHeader" id="code-try-73" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>LEFT JOIN</code> with two tables.<br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 LEFT JOIN CourseSelection
 ON Student.StudentID = CourseSelection.StudentID
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span> CourseSelection
-<span class="hljs-keyword">ON</span> Student.StudentID = CourseSelection.StudentID
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-74" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="//Left Join Student and CourseSelection tables.
+
+<pre><code class="lang-fsharp">//Left Join Student and CourseSelection tables.
 query {
     for student in db.Student do
     leftOuterJoin selection in db.CourseSelection
@@ -1763,125 +820,50 @@ query {
     for selection in result.DefaultIfEmpty() do
     select (student, selection)
 }
-"><span><span class="hljs-comment">//Left Join Student and CourseSelection tables.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    leftOuterJoin selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID) into result
-    <span class="hljs-keyword">for</span> selection <span class="hljs-keyword">in</span> result.DefaultIfEmpty() <span class="hljs-keyword">do</span>
-    select (student, selection)
-}
-</span>`</pre>
-</td></tr><tr><td>`JOIN` with `COUNT`<br>
-<div class="codeHeader" id="code-try-75" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT COUNT( * ) FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>JOIN</code> with <code>COUNT</code><br/>
+
+<pre><code class="lang-sql">SELECT COUNT( * ) FROM Student
 JOIN CourseSelection
 ON Student.StudentID = CourseSelection.StudentID
-"><span><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">COUNT</span>( * ) <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">JOIN</span> CourseSelection
-<span class="hljs-keyword">ON</span> Student.StudentID = CourseSelection.StudentID
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-76" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Join with count.
+
+<pre><code class="lang-fsharp">// Join with count.
 query {
     for n in db.Student do
     join e in db.CourseSelection
         on (n.StudentID = e.StudentID)
     count
 }
-"><span><span class="hljs-comment">// Join with count.</span>
-query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join e <span class="hljs-keyword">in</span> db.CourseSelection
-        on (n.StudentID = e.StudentID)
-    count
-}
-</span>`</pre>
-</td></tr><tr><td>`DISTINCT`<br>
-<div class="codeHeader" id="code-try-77" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT DISTINCT StudentID FROM CourseSelection
-"><span><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> StudentID <span class="hljs-keyword">FROM</span> CourseSelection
-</span>`</pre>
+</code></pre>
+
+</td></tr><tr><td><code>DISTINCT</code><br/>
+
+<pre><code class="lang-sql">SELECT DISTINCT StudentID FROM CourseSelection
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-78" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Join with distinct.
+
+<pre><code class="lang-fsharp">// Join with distinct.
 query {
     for student in db.Student do
     join selection in db.CourseSelection
         on (student.StudentID = selection.StudentID)
     distinct
 }
-"><span><span class="hljs-comment">// Join with distinct.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join selection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = selection.StudentID)
-    distinct
-}
-</span>`</pre>
-</td></tr><tr><td>Distinct count.<br>
-<div class="codeHeader" id="code-try-79" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT DISTINCT COUNT(StudentID) FROM CourseSelection
-"><span><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> <span class="hljs-keyword">COUNT</span>(StudentID) <span class="hljs-keyword">FROM</span> CourseSelection
-</span>`</pre>
+</code></pre>
+
+</td></tr><tr><td>Distinct count.<br/>
+
+<pre><code class="lang-sql">SELECT DISTINCT COUNT(StudentID) FROM CourseSelection
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-80" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Join with distinct and count.
+
+<pre><code class="lang-fsharp">// Join with distinct and count.
 query {
     for n in db.Student do
     join e in db.CourseSelection
@@ -1889,224 +871,93 @@ query {
     distinct
     count
 }
-"><span><span class="hljs-comment">// Join with distinct and count.</span>
-query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join e <span class="hljs-keyword">in</span> db.CourseSelection
-        on (n.StudentID = e.StudentID)
-    distinct
-    count
-}
-</span>`</pre>
-</td></tr><tr><td>`BETWEEN`<br>
-<div class="codeHeader" id="code-try-81" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>BETWEEN</code><br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 WHERE Student.Age BETWEEN 10 AND 15
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Age <span class="hljs-keyword">BETWEEN</span> <span class="hljs-number">10</span> <span class="hljs-keyword">AND</span> <span class="hljs-number">15</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-82" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Selecting students with ages between 10 and 15.
+
+<pre><code class="lang-fsharp">// Selecting students with ages between 10 and 15.
 query {
     for student in db.Student do
-    where (student.Age ?>= 10 &amp;&amp; student.Age ?< 15)
+    where (student.Age ?>= 10 && student.Age ?&lt; 15)
     select student
 }
-"><span><span class="hljs-comment">// Selecting students with ages between 10 and 15.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.Age ?&gt;= <span class="hljs-number">10</span> &amp;&amp; student.Age ?&lt; <span class="hljs-number">15</span>)
-    select student
-}
-</span>`</pre>
-</td></tr><tr><td>`OR`<br>
-<div class="codeHeader" id="code-try-83" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>OR</code><br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 WHERE Student.Age = 11 OR Student.Age = 12
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Age = <span class="hljs-number">11</span> <span class="hljs-keyword">OR</span> Student.Age = <span class="hljs-number">12</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-84" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Selecting students with age that's either 11 or 12.
+
+<pre><code class="lang-fsharp">// Selecting students with age that's either 11 or 12.
 query {
     for student in db.Student do
-    where (student.Age.Value = 11 || student.Age.Value = 12)
+    where (student.Age.Value = 11 &#124;&#124; student.Age.Value = 12)
     select student
 }
-"><span><span class="hljs-comment">// Selecting students with age that's either 11 or 12.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (student.Age.Value = <span class="hljs-number">11</span> || student.Age.Value = <span class="hljs-number">12</span>)
-    select student
-}
-</span>`</pre>
-</td></tr><tr><td>`OR` with ordering<br>
-<div class="codeHeader" id="code-try-85" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>OR</code> with ordering<br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student
 WHERE Student.Age = 12 OR Student.Age = 13
 ORDER BY Student.Age DESC
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Age = <span class="hljs-number">12</span> <span class="hljs-keyword">OR</span> Student.Age = <span class="hljs-number">13</span>
-<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> Student.Age <span class="hljs-keyword">DESC</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-86" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Selecting students in a certain age range and sorting.
+
+<pre><code class="lang-fsharp">// Selecting students in a certain age range and sorting.
 query {
     for n in db.Student do
-    where (n.Age.Value = 12 || n.Age.Value = 13)
+    where (n.Age.Value = 12 &#124;&#124; n.Age.Value = 13)
     sortByNullableDescending n.Age
     select n
 }
-"><span><span class="hljs-comment">// Selecting students in a certain age range and sorting.</span>
-query {
-    <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where (n.Age.Value = <span class="hljs-number">12</span> || n.Age.Value = <span class="hljs-number">13</span>)
-    sortByNullableDescending n.Age
-    select n
-}
-</span>`</pre>
-</td></tr><tr><td>`TOP`, `OR`, and ordering.<br>
-<div class="codeHeader" id="code-try-87" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT TOP 2 student.Name FROM Student
+</code></pre>
+
+</td></tr><tr><td><code>TOP</code>, <code>OR</code>, and ordering.<br/>
+
+<pre><code class="lang-sql">SELECT TOP 2 student.Name FROM Student
 WHERE Student.Age = 11 OR Student.Age = 12
 ORDER BY Student.Name DESC
-"><span><span class="hljs-keyword">SELECT</span> TOP <span class="hljs-number">2</span> student.Name <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">WHERE</span> Student.Age = <span class="hljs-number">11</span> <span class="hljs-keyword">OR</span> Student.Age = <span class="hljs-number">12</span>
-<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> Student.Name <span class="hljs-keyword">DESC</span>
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-88" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Selecting students with certain ages,
+
+<pre><code class="lang-fsharp">// Selecting students with certain ages,
 // taking account of the possibility of nulls.
 query {
     for student in db.Student do
     where
-        ((student.Age.HasValue &amp;&amp; student.Age.Value = 11) ||
-         (student.Age.HasValue &amp;&amp; student.Age.Value = 12))
+        ((student.Age.HasValue && student.Age.Value = 11) &#124;&#124;
+         (student.Age.HasValue && student.Age.Value = 12))
     sortByDescending student.Name
     select student.Name
     take 2
 }
-"><span><span class="hljs-comment">// Selecting students with certain ages,</span>
-<span class="hljs-comment">// taking account of the possibility of nulls.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    where
-        ((student.Age.HasValue &amp;&amp; student.Age.Value = <span class="hljs-number">11</span>) ||
-         (student.Age.HasValue &amp;&amp; student.Age.Value = <span class="hljs-number">12</span>))
-    sortByDescending student.Name
-    select student.Name
-    take <span class="hljs-number">2</span>
-}
-</span>`</pre>
-</td></tr><tr><td>`UNION` of two queries.<br>
+</code></pre>
+
+</td></tr><tr><td><code>UNION</code> of two queries.<br/>
+
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-space-in-emphasis -->
-<div class="codeHeader" id="code-try-89" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+<pre><code class="lang-sql">SELECT * FROM Student
 UNION
 SELECT * FROM lastStudent
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">UNION</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> lastStudent
-</span>`</pre>
+</code></pre>
 <!-- markdownlint-restore -->
+
 </td><td>
-<div class="codeHeader" id="code-try-90" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="
+
+<pre><code class="lang-fsharp">
 let query1 =
     query {
         for n in db.Student do
@@ -2120,54 +971,20 @@ let query2 =
     }
 
 query2.Union (query1)
-"><span>
-<span class="hljs-keyword">let</span> query1 =
-    query {
-        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-        select (n.Name, n.Age)
-    }
+</code></pre>
 
-<span class="hljs-keyword">let</span> query2 =
-    query {
-        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.LastStudent <span class="hljs-keyword">do</span>
-        select (n.Name, n.Age)
-    }
+</td></tr><tr><td>Intersection of two queries.<br/>
 
-query2.Union (query1)
-</span>`</pre>
-</td></tr><tr><td>Intersection of two queries.<br>
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable no-space-in-emphasis -->
-<div class="codeHeader" id="code-try-91" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student
+<pre><code class="lang-sql">SELECT * FROM Student
 INTERSECT
 SELECT * FROM LastStudent
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">INTERSECT</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> LastStudent
-</span>`</pre>
+</code></pre>
 <!-- markdownlint-restore -->
 </td><td>
-<div class="codeHeader" id="code-try-92" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="
+
+<pre><code class="lang-fsharp">
 let query1 =
     query {
         for n in db.Student do
@@ -2181,87 +998,33 @@ let query2 =
     }
 
 query1.Intersect(query2)
-"><span>
-<span class="hljs-keyword">let</span> query1 =
-    query {
-        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-        select (n.Name, n.Age)
-    }
+</code></pre>
 
-<span class="hljs-keyword">let</span> query2 =
-    query {
-        <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> db.LastStudent <span class="hljs-keyword">do</span>
-        select (n.Name, n.Age)
-    }
+</td></tr><tr><td><code>CASE</code> condition.<br/>
 
-query1.Intersect(query2)
-</span>`</pre>
-</td></tr><tr><td>`CASE` condition.<br>
-<div class="codeHeader" id="code-try-93" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT student.StudentID,
+<pre><code class="lang-sql">SELECT student.StudentID,
 CASE Student.Age
   WHEN -1 THEN 100
   ELSE Student.Age
 END,
 Student.Age
 FROM Student
-"><span><span class="hljs-keyword">SELECT</span> student.StudentID,
-<span class="hljs-keyword">CASE</span> Student.Age
-  <span class="hljs-keyword">WHEN</span> <span class="hljs-number">-1</span> <span class="hljs-keyword">THEN</span> <span class="hljs-number">100</span>
-  <span class="hljs-keyword">ELSE</span> Student.Age
-<span class="hljs-keyword">END</span>,
-Student.Age
-<span class="hljs-keyword">FROM</span> Student
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-94" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Using if statement to alter results for special value.
+<pre><code class="lang-fsharp">// Using if statement to alter results for special value.
 query {
     for student in db.Student do
     select
-        (if student.Age.HasValue &amp;&amp; student.Age.Value = -1 then
-             (student.StudentID, System.Nullable<int>(100), student.Age)
+        (if student.Age.HasValue && student.Age.Value = -1 then
+             (student.StudentID, System.Nullable&lt;int&gt;(100), student.Age)
          else (student.StudentID, student.Age, student.Age))
 }
-"><span><span class="hljs-comment">// Using if statement to alter results for special value.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select
-        (<span class="hljs-keyword">if</span> student.Age.HasValue &amp;&amp; student.Age.Value = <span class="hljs-number">-1</span> <span class="hljs-keyword">then</span>
-             (student.StudentID, System.Nullable&lt;int&gt;(<span class="hljs-number">100</span>), student.Age)
-         <span class="hljs-keyword">else</span> (student.StudentID, student.Age, student.Age))
-}
-</span>`</pre>
-</td></tr><tr><td>Multiple cases.<br>
-<div class="codeHeader" id="code-try-95" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.StudentID,
+</code></pre>
+
+</td></tr><tr><td>Multiple cases.<br/>
+
+<pre><code class="lang-sql">SELECT Student.StudentID,
 CASE Student.Age
   WHEN -1 THEN 100
   WHEN 0 THEN 1000
@@ -2269,121 +1032,50 @@ CASE Student.Age
 END,
 Student.Age
 FROM Student
-"><span><span class="hljs-keyword">SELECT</span> Student.StudentID,
-<span class="hljs-keyword">CASE</span> Student.Age
-  <span class="hljs-keyword">WHEN</span> <span class="hljs-number">-1</span> <span class="hljs-keyword">THEN</span> <span class="hljs-number">100</span>
-  <span class="hljs-keyword">WHEN</span> <span class="hljs-number">0</span> <span class="hljs-keyword">THEN</span> <span class="hljs-number">1000</span>
-  <span class="hljs-keyword">ELSE</span> Student.Age
-<span class="hljs-keyword">END</span>,
-Student.Age
-<span class="hljs-keyword">FROM</span> Student
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-96" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Using if statement to alter results for special values.
+
+<pre><code class="lang-fsharp">// Using if statement to alter results for special values.
 query {
     for student in db.Student do
     select
-        (if student.Age.HasValue &amp;&amp; student.Age.Value = -1 then
-             (student.StudentID, System.Nullable<int>(100), student.Age)
-         elif student.Age.HasValue &amp;&amp; student.Age.Value = 0 then
-             (student.StudentID, System.Nullable<int>(1000), student.Age)
+        (if student.Age.HasValue && student.Age.Value = -1 then
+             (student.StudentID, System.Nullable&lt;int&gt;(100), student.Age)
+         elif student.Age.HasValue && student.Age.Value = 0 then
+             (student.StudentID, System.Nullable&lt;int&gt;(1000), student.Age)
          else (student.StudentID, student.Age, student.Age))
 }
-"><span><span class="hljs-comment">// Using if statement to alter results for special values.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    select
-        (<span class="hljs-keyword">if</span> student.Age.HasValue &amp;&amp; student.Age.Value = <span class="hljs-number">-1</span> <span class="hljs-keyword">then</span>
-             (student.StudentID, System.Nullable&lt;int&gt;(<span class="hljs-number">100</span>), student.Age)
-         <span class="hljs-keyword">elif</span> student.Age.HasValue &amp;&amp; student.Age.Value = <span class="hljs-number">0</span> <span class="hljs-keyword">then</span>
-             (student.StudentID, System.Nullable&lt;int&gt;(<span class="hljs-number">1000</span>), student.Age)
-         <span class="hljs-keyword">else</span> (student.StudentID, student.Age, student.Age))
-}
-</span>`</pre>
-</td></tr><tr><td>Multiple tables.<br>
-<div class="codeHeader" id="code-try-97" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT * FROM Student, Course
-"><span><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> Student, Course
-</span>`</pre>
+</code></pre>
+
+</td></tr><tr><td>Multiple tables.<br/>
+
+<pre><code class="lang-sql">SELECT * FROM Student, Course
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-98" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Multiple table select.
+
+<pre><code class="lang-fsharp">// Multiple table select.
 query {
     for student in db.Student do
     for course in db.Course do
     select (student, course)
 }
-"><span><span class="hljs-comment">// Multiple table select.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    <span class="hljs-keyword">for</span> course <span class="hljs-keyword">in</span> db.Course <span class="hljs-keyword">do</span>
-    select (student, course)
-}
-</span>`</pre>
-</td></tr><tr><td>Multiple joins.<br>
-<div class="codeHeader" id="code-try-99" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Name, Course.CourseName
+</code></pre>
+
+</td></tr><tr><td>Multiple joins.<br/>
+
+<pre><code class="lang-sql">SELECT Student.Name, Course.CourseName
 FROM Student
 JOIN CourseSelection
 ON CourseSelection.StudentID = Student.StudentID
 JOIN Course
 ON Course.CourseID = CourseSelection.CourseID
-"><span><span class="hljs-keyword">SELECT</span> Student.Name, Course.CourseName
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">JOIN</span> CourseSelection
-<span class="hljs-keyword">ON</span> CourseSelection.StudentID = Student.StudentID
-<span class="hljs-keyword">JOIN</span> Course
-<span class="hljs-keyword">ON</span> Course.CourseID = CourseSelection.CourseID
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-100" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Multiple joins.
+
+<pre><code class="lang-fsharp">// Multiple joins.
 query {
     for student in db.Student do
     join courseSelection in db.CourseSelection
@@ -2392,52 +1084,21 @@ query {
         on (courseSelection.CourseID = course.CourseID)
     select (student.Name, course.CourseName)
 }
-"><span><span class="hljs-comment">// Multiple joins.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    join courseSelection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = courseSelection.StudentID)
-    join course <span class="hljs-keyword">in</span> db.Course
-        on (courseSelection.CourseID = course.CourseID)
-    select (student.Name, course.CourseName)
-}
-</span>`</pre>
-</td></tr><tr><td>Multiple left outer joins.<br>
-<div class="codeHeader" id="code-try-101" data-bi-name="code-header"><span class="language">SQL</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-sql" data-author-content="SELECT Student.Name, Course.CourseName
+</code></pre>
+
+</td></tr><tr><td>Multiple left outer joins.<br/>
+
+<pre><code class="lang-sql">SELECT Student.Name, Course.CourseName
 FROM Student
 LEFT OUTER JOIN CourseSelection
 ON CourseSelection.StudentID = Student.StudentID
 LEFT OUTER JOIN Course
 ON Course.CourseID = CourseSelection.CourseID
-"><span><span class="hljs-keyword">SELECT</span> Student.Name, Course.CourseName
-<span class="hljs-keyword">FROM</span> Student
-<span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">OUTER</span> <span class="hljs-keyword">JOIN</span> CourseSelection
-<span class="hljs-keyword">ON</span> CourseSelection.StudentID = Student.StudentID
-<span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">OUTER</span> <span class="hljs-keyword">JOIN</span> Course
-<span class="hljs-keyword">ON</span> Course.CourseID = CourseSelection.CourseID
-</span>`</pre>
+</code></pre>
+
 </td><td>
-<div class="codeHeader" id="code-try-102" data-bi-name="code-header"><span class="language">F#</span><button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">
-				<span class="icon">
-					<span class="docon docon-edit-copy" role="presentation"></span>
-				</span>
-				<span>Copy</span>
-				<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">
-					<span class="icon font-size-l">
-						<span class="docon docon-check-mark" role="presentation"></span>
-					</span>
-				</div>
-			</button></div><pre tabindex="0" class="has-inner-focus"><code class="lang-fsharp" data-author-content="// Using leftOuterJoin with multiple joins.
+
+<pre><code class="lang-fsharp">// Using leftOuterJoin with multiple joins.
 query {
     for student in db.Student do
     leftOuterJoin courseSelection in db.CourseSelection
@@ -2448,25 +1109,13 @@ query {
     for course in g2.DefaultIfEmpty() do
     select (student.Name, course.CourseName)
 }
-"><span><span class="hljs-comment">// Using leftOuterJoin with multiple joins.</span>
-query {
-    <span class="hljs-keyword">for</span> student <span class="hljs-keyword">in</span> db.Student <span class="hljs-keyword">do</span>
-    leftOuterJoin courseSelection <span class="hljs-keyword">in</span> db.CourseSelection
-        on (student.StudentID = courseSelection.StudentID) into g1
-    <span class="hljs-keyword">for</span> courseSelection <span class="hljs-keyword">in</span> g1.DefaultIfEmpty() <span class="hljs-keyword">do</span>
-    leftOuterJoin course <span class="hljs-keyword">in</span> db.Course
-        on (courseSelection.CourseID = course.CourseID) into g2
-    <span class="hljs-keyword">for</span> course <span class="hljs-keyword">in</span> g2.DefaultIfEmpty() <span class="hljs-keyword">do</span>
-    select (student.Name, course.CourseName)
-}
-</span>`</pre>
-</td></tr></tbody></table>
+</code></pre>
+
+</td></tr></table>
 
 The following code can be used to create the sample database for these examples.
 
-#!fsharp
-
-SET ANSI_NULLS ON
+<pre><code class="lang-sql">SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -2584,14 +1233,11 @@ INSERT INTO CourseSelection (ID, StudentID, CourseID)
 VALUES(14, 5, 2);
 INSERT INTO CourseSelection (ID, StudentID, CourseID)
 VALUES(15, 7, 3);
-
-
-#!markdown
+</code></pre>
 
 The following code contains  the sample code that appears in this topic.
 
 #!fsharp
-
 #if INTERACTIVE
 #r "FSharp.Data.TypeProviders.dll"
 #r "System.Data.dll"
@@ -3221,14 +1867,11 @@ query {
     select (student.Name, course.CourseName)
 }
 |> Seq.iter (fun (studentName, courseName) -> printfn "%s %s" studentName courseName)
-
-
 #!markdown
 
 And here is the full output when this code is run in F# Interactive.
 
-#!fsharp
-
+#!share
 --> Referenced 'C:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\3.0\Runtime\v4.0\Type Providers\FSharp.Data.TypeProviders.dll'
 
 --> Referenced 'C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Data.dll'
@@ -3785,9 +2428,10 @@ module Queries2 = begin
   val query1 : System.Linq.IQueryable<string * System.Nullable<int>>
   val query2 : System.Linq.IQueryable<string * System.Nullable<int>>
 end
-
-
 #!markdown
 
 ## See also
 
+- [F# Language Reference](index.md)
+- [QueryBuilder Class](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-linq-querybuilder.html)
+- [Computation Expressions](computation-expressions.md)

@@ -64,5 +64,3 @@ linkElement.setAttribute('href', dataUri);
 linkElement.setAttribute('download', exportFileDefaultName);
 linkElement.click();
 
-console.log(result);
-console.log(result.length);

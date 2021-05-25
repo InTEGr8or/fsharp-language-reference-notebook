@@ -1,127 +1,37 @@
 #!markdown
 
+---
+title: Basic Types
+description: Discover the fundamental basic types that are used in the F# language.
+ms.date: 08/15/2020
+---
 # Basic types
 
 This topic lists the basic types that are defined in the F# language. These types are the most fundamental in F#, forming the basis of nearly every F# program. They are a superset of .NET primitive types.
 
-<table class="table"><caption class="visually-hidden">Basic types</caption>
-<thead>
-<tr>
-<th>Type</th>
-<th>.NET type</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`bool`</td>
-<td><a href="/en-us/dotnet/api/system.boolean" data-linktype="absolute-path">Boolean</a></td>
-<td>Possible values are `true` and `false`.</td>
-<td>`true`/`false`</td>
-</tr>
-<tr>
-<td>`byte`</td>
-<td><a href="/en-us/dotnet/api/system.byte" data-linktype="absolute-path">Byte</a></td>
-<td>Values from 0 to 255.</td>
-<td>`1uy`</td>
-</tr>
-<tr>
-<td>`sbyte`</td>
-<td><a href="/en-us/dotnet/api/system.sbyte" data-linktype="absolute-path">SByte</a></td>
-<td>Values from -128 to 127.</td>
-<td>`1y`</td>
-</tr>
-<tr>
-<td>`int16`</td>
-<td><a href="/en-us/dotnet/api/system.int16" data-linktype="absolute-path">Int16</a></td>
-<td>Values from -32768 to 32767.</td>
-<td>`1s`</td>
-</tr>
-<tr>
-<td>`uint16`</td>
-<td><a href="/en-us/dotnet/api/system.uint16" data-linktype="absolute-path">UInt16</a></td>
-<td>Values from 0 to 65535.</td>
-<td>`1us`</td>
-</tr>
-<tr>
-<td>`int`</td>
-<td><a href="/en-us/dotnet/api/system.int32" data-linktype="absolute-path">Int32</a></td>
-<td>Values from -2,147,483,648 to 2,147,483,647.</td>
-<td>`1`</td>
-</tr>
-<tr>
-<td>`uint`</td>
-<td><a href="/en-us/dotnet/api/system.uint32" data-linktype="absolute-path">UInt32</a></td>
-<td>Values from 0 to 4,294,967,295.</td>
-<td>`1u`</td>
-</tr>
-<tr>
-<td>`int64`</td>
-<td><a href="/en-us/dotnet/api/system.int64" data-linktype="absolute-path">Int64</a></td>
-<td>Values from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.</td>
-<td>`1L`</td>
-</tr>
-<tr>
-<td>`uint64`</td>
-<td><a href="/en-us/dotnet/api/system.uint64" data-linktype="absolute-path">UInt64</a></td>
-<td>Values from 0 to 18,446,744,073,709,551,615.</td>
-<td>`1UL`</td>
-</tr>
-<tr>
-<td>`nativeint`</td>
-<td><a href="/en-us/dotnet/api/system.intptr" data-linktype="absolute-path">IntPtr</a></td>
-<td>A native pointer as a signed integer.</td>
-<td>`nativeint 1`</td>
-</tr>
-<tr>
-<td>`unativeint`</td>
-<td><a href="/en-us/dotnet/api/system.uintptr" data-linktype="absolute-path">UIntPtr</a></td>
-<td>A native pointer as an unsigned integer.</td>
-<td>`unativeint 1`</td>
-</tr>
-<tr>
-<td>`decimal`</td>
-<td><a href="/en-us/dotnet/api/system.decimal" data-linktype="absolute-path">Decimal</a></td>
-<td>A floating point data type that has at least 28 significant digits.</td>
-<td>`1.0`</td>
-</tr>
-<tr>
-<td>`float`, `double`</td>
-<td><a href="/en-us/dotnet/api/system.double" data-linktype="absolute-path">Double</a></td>
-<td>A 64-bit floating point type.</td>
-<td>`1.0`</td>
-</tr>
-<tr>
-<td>`float32`, `single`</td>
-<td><a href="/en-us/dotnet/api/system.single" data-linktype="absolute-path">Single</a></td>
-<td>A 32-bit floating point type.</td>
-<td>`1.0f`</td>
-</tr>
-<tr>
-<td>`char`</td>
-<td><a href="/en-us/dotnet/api/system.char" data-linktype="absolute-path">Char</a></td>
-<td>Unicode character values.</td>
-<td>`'c'`</td>
-</tr>
-<tr>
-<td>`string`</td>
-<td><a href="/en-us/dotnet/api/system.string" data-linktype="absolute-path">String</a></td>
-<td>Unicode text.</td>
-<td>`"str"`</td>
-</tr>
-<tr>
-<td>`unit`</td>
-<td>not applicable</td>
-<td>Indicates the absence of an actual value. The type has only one formal value, which is denoted `()`. The unit value, `()`, is often used as a placeholder where a value is needed but no real value is available or makes sense.</td>
-<td>`()`</td>
-</tr>
-</tbody>
-</table>
+|Type|.NET type|Description|Example|
+|----|---------|-----------|-------|
+|`bool`|<xref:System.Boolean>|Possible values are `true` and `false`.|`true`/`false`|
+|`byte`|<xref:System.Byte>|Values from 0 to 255.|`1uy`|
+|`sbyte`|<xref:System.SByte>|Values from -128 to 127.|`1y`|
+|`int16`|<xref:System.Int16>|Values from -32768 to 32767.|`1s`|
+|`uint16`|<xref:System.UInt16>|Values from 0 to 65535.|`1us`|
+|`int`|<xref:System.Int32>|Values from -2,147,483,648 to 2,147,483,647.|`1`|
+|`uint`|<xref:System.UInt32>|Values from 0 to 4,294,967,295.|`1u`|
+|`int64`|<xref:System.Int64>|Values from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.|`1L`|
+|`uint64`|<xref:System.UInt64>|Values from 0 to 18,446,744,073,709,551,615.|`1UL`|
+|`nativeint`|<xref:System.IntPtr>|A native pointer as a signed integer.|`nativeint 1`|
+|`unativeint`|<xref:System.UIntPtr>|A native pointer as an unsigned integer.|`unativeint 1`|
+|`decimal`|<xref:System.Decimal>|A floating point data type that has at least 28 significant digits.|`1.0`|
+|`float`, `double`|<xref:System.Double>|A 64-bit floating point type.|`1.0`|
+|`float32`, `single`|<xref:System.Single>|A 32-bit floating point type.|`1.0f`|
+|`char`|<xref:System.Char>|Unicode character values.|`'c'`|
+|`string`|<xref:System.String>|Unicode text.|`"str"`|
+|`unit`|not applicable|Indicates the absence of an actual value. The type has only one formal value, which is denoted `()`. The unit value, `()`, is often used as a placeholder where a value is needed but no real value is available or makes sense.|`()`|
 
-> <span class="docon docon-status-error-outline" aria-hidden="true"></span> Note
-You can perform computations with integers too big for the 64-bit integer type by using the `bigint` type. `bigint` is not considered a basic type; it is an abbreviation for `System.Numerics.BigInteger`.
-
+> [!NOTE]
+> You can perform computations with integers too big for the 64-bit integer type by using the `bigint` type. `bigint` is not considered a basic type; it is an abbreviation for `System.Numerics.BigInteger`.
 
 ## See also
 
+- [F# Language Reference](index.md)

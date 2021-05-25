@@ -1,236 +1,74 @@
 #!markdown
 
+---
+title: Compiler Options
+description: Use F# compiler command-line options to control the compilation of your F# apps and libraries.
+ms.date: 08/15/2020
+---
 # Compiler options
 
 This topic describes compiler command-line options for the F# compiler, fsc.exe.
 
-The compilation environment can also be controlled by setting the project properties. For projects targeting .NET Core, the "Other flags" property, `&lt;OtherFlags&gt;...&lt;/OtherFlags&gt;` in `.fsproj`, is used for specifying extra command-line options.
+The compilation environment can also be controlled by setting the project properties. For projects targeting .NET Core, the "Other flags" property, `<OtherFlags>...</OtherFlags>` in `.fsproj`, is used for specifying extra command-line options.
 
 ## Compiler Options Listed Alphabetically
 
 The following table shows compiler options listed alphabetically. Some of the F# compiler options are similar to the C# compiler options. If that is the case, a link to the C# compiler options topic is provided.
 
-<table class="table"><caption class="visually-hidden">Compiler Options Listed Alphabetically</caption>
-<thead>
-<tr>
-<th>Compiler Option</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`-a filename.fs`</td>
-<td>Generates a library from the specified file. This option is a short form of `--target:library filename.fs`.</td>
-</tr>
-<tr>
-<td>`--baseaddress:address`</td>
-<td>Specifies the preferred base address at which to load a DLL.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#baseaddress" data-linktype="relative-path">/baseaddress (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--codepage:id`</td>
-<td>Specifies which code page to use during compilation if the required page isn't the current default code page for the system.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#codepage" data-linktype="relative-path">/code pages (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--consolecolors`</td>
-<td>Specifies that errors and warnings use color-coded text on the console.</td>
-</tr>
-<tr>
-<td>`--crossoptimize[+|-]`</td>
-<td>Enables or disables cross-module optimizations.</td>
-</tr>
-<tr>
-<td>`--delaysign[+|-]`</td>
-<td>Delay-signs the assembly using only the public portion of the strong name key.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/security#delaysign" data-linktype="relative-path">/delaysign (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--checked[+|-]`</td>
-<td>Enables or disables the generation of overflow checks.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/language#checkforoverflowunderflow" data-linktype="relative-path">/checked (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--debug[+|-]`<br><br>`-g[+|-]`<br><br>`--debug:[full|pdbonly]`<br><br>`-g: [full|pdbonly]`</td>
-<td>Enables or disables the generation of debug information, or specifies the type of debug information to generate. The default is `full`, which allows attaching to a running program. Choose `pdbonly` to get limited debugging information stored in a pdb (program database) file.<br><br>Equivalent to the C# compiler option of the same name. For more information, see<br><br><a href="../../csharp/language-reference/compiler-options/code-generation#debugtype" data-linktype="relative-path">/debug (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--define:symbol`<br><br>`-d:symbol`</td>
-<td>Defines a symbol for use in conditional compilation.</td>
-</tr>
-<tr>
-<td>`--deterministic[+|-]`</td>
-<td>Produces a deterministic assembly (including module version GUID and timestamp). This option cannot be used with wildcard version numbers, and only supports embedded and portable debugging types</td>
-</tr>
-<tr>
-<td>`--doc:xmldoc-filename`</td>
-<td>Instructs the compiler to generate XML documentation comments to the file specified. For more information, see <a href="xml-documentation" data-linktype="relative-path">XML Documentation</a>.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/output#documentationfile" data-linktype="relative-path">/doc (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--fullpaths`</td>
-<td>Instructs the compiler to generate fully qualified paths.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#generatefullpaths" data-linktype="relative-path">/fullpaths (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--help`<br><br>`-?`</td>
-<td>Displays usage information, including a brief description of all the compiler options.</td>
-</tr>
-<tr>
-<td>`--highentropyva[+|-]`</td>
-<td>Enable or disable high-entropy address space layout randomization (ASLR), an enhanced security feature. The OS randomizes the locations in memory where infrastructure for applications (such as the stack and heap) are loaded. If you enable this option, operating systems can use this randomization to use the full 64-bit address-space on a 64-bit machine.</td>
-</tr>
-<tr>
-<td>`--keycontainer:key-container-name`</td>
-<td>Specifies a strong name key container.</td>
-</tr>
-<tr>
-<td>`--keyfile:filename`</td>
-<td>Specifies the name of a public key file for signing the generated assembly.</td>
-</tr>
-<tr>
-<td>`--lib:folder-name`<br><br>`-I:folder-name`</td>
-<td>Specifies a directory to be searched for assemblies that are referenced.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#additionallibpaths" data-linktype="relative-path">/lib (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--linkresource:resource-info`</td>
-<td>Links a specified resource to the assembly. The format of resource-info is `filename[name[public|private]]`<br><br>Linking a single resource with this option is an alternative to embedding an entire resource file with the `--resource` option.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/resources#linkresources" data-linktype="relative-path">/linkresource (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--mlcompatibility`</td>
-<td>Ignores warnings that appear when you use features that are designed for compatibility with other versions of ML.</td>
-</tr>
-<tr>
-<td>`--noframework`</td>
-<td>Disables the default reference to the .NET Framework assembly.</td>
-</tr>
-<tr>
-<td>`--nointerfacedata`</td>
-<td>Instructs the compiler to omit the resource it normally adds to an assembly that includes F#-specific metadata.</td>
-</tr>
-<tr>
-<td>`--nologo`</td>
-<td>Doesn't show the banner text when launching the compiler.</td>
-</tr>
-<tr>
-<td>`--nooptimizationdata`</td>
-<td>Instructs the compiler to only include optimization essential for implementing inlined constructs. Inhibits cross-module inlining but improves binary compatibility.</td>
-</tr>
-<tr>
-<td>`--nowin32manifest`</td>
-<td>Instructs the compiler to omit the default Win32 manifest.</td>
-</tr>
-<tr>
-<td>`--nowarn:warning-number-list`</td>
-<td>Disables specific warnings listed by number. Separate each warning number by a comma. You can discover the warning number for any warning from the compilation output.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/errors-warnings#disabledwarnings" data-linktype="relative-path">/nowarn (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--optimize[+|-][optimization-option-list]`<br><br>`-O[+|-] [optimization-option-list]`</td>
-<td>Enables or disables optimizations. Some optimization options can be disabled or enabled selectively by listing them. These are: `nojitoptimize`, `nojittracking`, `nolocaloptimize`, `nocrossoptimize`, `notailcalls`.</td>
-</tr>
-<tr>
-<td>`--out:output-filename`<br><br>`-o:output-filename`</td>
-<td>Specifies the name of the compiled assembly or module.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/output#outputassembly" data-linktype="relative-path">/out (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--pathmap:path=sourcePath,...`</td>
-<td>Specifies how to map physical paths to source path names output by the compiler.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#pathmap" data-linktype="relative-path">/pathmap (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--pdb:pdb-filename`</td>
-<td>Names the output debug PDB (program database) file. This option only applies when `--debug` is also enabled.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/advanced#pdbfile" data-linktype="relative-path">/pdb (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--platform:platform-name`</td>
-<td>Specifies that the generated code will only run on the specified platform (`x86`, `Itanium`, or `x64`), or, if the platform-name `anycpu` is chosen, specifies that the generated code can run on any platform.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/output#platformtarget" data-linktype="relative-path">/platform (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--preferreduilang:lang`</td>
-<td>Specifies the preferred output language culture name (for example,  `es-ES`, `ja-JP`).</td>
-</tr>
-<tr>
-<td>`--quotations-debug`</td>
-<td>Specifies that extra debugging information should be emitted for expressions that are derived from F# quotation literals and reflected definitions. The debug information is added to the custom attributes of an F# expression tree node. See <a href="code-quotations" data-linktype="relative-path">Code Quotations</a> and <a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-quotations-fsharpexpr.html#CustomAttributes" data-linktype="external">Expr.CustomAttributes</a>.</td>
-</tr>
-<tr>
-<td>`--reference:assembly-filename`<br><br>`-r:assembly-filename`</td>
-<td>Makes code from an F# or .NET Framework assembly available to the code being compiled.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/inputs#references" data-linktype="relative-path">/reference (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--resource:resource-filename`</td>
-<td>Embeds a managed resource file into the generated assembly.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/resources#resources" data-linktype="relative-path">/resource (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--sig:signature-filename`</td>
-<td>Generates a signature file based on the generated assembly. For more information about signature files, see <a href="signature-files" data-linktype="relative-path">Signatures</a>.</td>
-</tr>
-<tr>
-<td>`--simpleresolution`</td>
-<td>Specifies that assembly references should be resolved using directory-based Mono rules rather than MSBuild resolution. The default is to use MSBuild resolution except when running under Mono.</td>
-</tr>
-<tr>
-<td>`--standalone`</td>
-<td>Specifies to produce an assembly that contains all of its dependencies so that it runs by itself without the need for additional assemblies, such as the F# library.</td>
-</tr>
-<tr>
-<td>`--staticlink:assembly-name`</td>
-<td>Statically links the given assembly and all referenced DLLs that depend on this assembly. Use the assembly name, not the DLL name.</td>
-</tr>
-<tr>
-<td>`--subsystemversion`</td>
-<td>Specifies the version of the OS subsystem to be used by the generated executable. Use 6.02 for Windows 8.1, 6.01 for Windows 7, 6.00 for Windows Vista. This option only applies to executables, not DLLs, and need only be used if your application depends on specific security features available only on certain versions of the OS. If this option is used, and a user attempts to execute your application on a lower version of the OS, it will fail with an error message.</td>
-</tr>
-<tr>
-<td>`--tailcalls[+|-]`</td>
-<td>Enables or disables the use of the tail IL instruction, which causes the stack frame to be reused for tail recursive functions. This option is enabled by default.</td>
-</tr>
-<tr>
-<td>`--target:[exe|winexe|library|module] filename`</td>
-<td>Specifies the type and file name of the generated compiled code.<ul><li>`exe` means a console application.<br></li><li>`winexe` means a Windows application, which differs from the console application in that it does not have standard input/output streams (stdin, stdout, and stderr) defined.<br></li><li>`library` is an assembly without an entry point.<br></li><li>`module` is a .NET Framework module (.netmodule), which can later be combined with other modules into an assembly.<br></li><ul>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/output#targettype" data-linktype="relative-path">/target (C# Compiler Options)</a>.</ul></ul></td>
-</tr>
-<tr>
-<td>`--times`</td>
-<td>Displays timing information for compilation.</td>
-</tr>
-<tr>
-<td>`--utf8output`</td>
-<td>Enables printing compiler output in the UTF-8 encoding.</td>
-</tr>
-<tr>
-<td>`--warn:warning-level`</td>
-<td>Sets a warning level (0 to 5). The default level is 3. Each warning is given a level based on its severity. Level 5 gives more, but less severe, warnings than level 1.<br><br>Level 5 warnings are: 21 (recursive use checked at runtime), 22 (`let rec` evaluated out of order), 45 (full abstraction), and 52 (defensive copy). All other warnings are level 2.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/errors-warnings#warninglevel" data-linktype="relative-path">/warn (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--warnon:warning-number-list`</td>
-<td>Enable specific warnings that might be off by default or disabled by another command-line option. The 1182 (unused variables) warning is off by default.</td>
-</tr>
-<tr>
-<td>`--warnaserror[+|-] [warning-number-list]`</td>
-<td>Enables or disables the option to report warnings as errors. You can provide specific warning numbers to be disabled or enabled. Options later in the command line override options earlier in the command line. For example, to specify the warnings that you don't want reported as errors, specify `--warnaserror+` `--warnaserror-:warning-number-list`.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/errors-warnings#treatwarningsaserrors" data-linktype="relative-path">/warnaserror (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--win32manifest:manifest-filename`</td>
-<td>Adds a Win32 manifest file to the compilation. This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/resources#win32manifest" data-linktype="relative-path">/win32manifest (C# Compiler Options)</a>.</td>
-</tr>
-<tr>
-<td>`--win32res:resource-filename`</td>
-<td>Adds a Win32 resource file to the compilation.<br><br>This compiler option is equivalent to the C# compiler option of the same name. For more information, see <a href="../../csharp/language-reference/compiler-options/resources#win32resource" data-linktype="relative-path">/win32res ((C#) Compiler Options)</a>.</td>
-</tr>
-</tbody>
-</table>
+|Compiler Option|Description|
+|---------------|-----------|
+|`-a filename.fs`|Generates a library from the specified file. This option is a short form of `--target:library filename.fs`.|
+|`--baseaddress:address`|Specifies the preferred base address at which to load a DLL.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;baseaddress &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#baseaddress).|
+|`--codepage:id`|Specifies which code page to use during compilation if the required page isn't the current default code page for the system.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;code pages &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#codepage).|
+|`--consolecolors`|Specifies that errors and warnings use color-coded text on the console.|
+|`--crossoptimize[+|-]`|Enables or disables cross-module optimizations.|
+|<code>--delaysign[+&#124;-]</code>|Delay-signs the assembly using only the public portion of the strong name key.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;delaysign &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/security.md#delaysign).|
+|<code>--checked[+&#124;-]</code>|Enables or disables the generation of overflow checks.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;checked &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/language.md#checkforoverflowunderflow).|
+|<code>--debug[+&#124;-]</code><br /><br /><code>-g[+&#124;-]</code><br /><br /><code>--debug:[full&#124;pdbonly]</code><br /><br /><code>-g: [full&#124;pdbonly]</code>|Enables or disables the generation of debug information, or specifies the type of debug information to generate. The default is `full`, which allows attaching to a running program. Choose `pdbonly` to get limited debugging information stored in a pdb (program database) file.<br /><br />Equivalent to the C# compiler option of the same name. For more information, see<br /><br />[&#47;debug &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/code-generation.md#debugtype).|
+|`--define:symbol`<br /><br />`-d:symbol`|Defines a symbol for use in conditional compilation.|
+|<code>--deterministic[+&#124;-]</code>|Produces a deterministic assembly (including module version GUID and timestamp). This option cannot be used with wildcard version numbers, and only supports embedded and portable debugging types|
+|`--doc:xmldoc-filename`|Instructs the compiler to generate XML documentation comments to the file specified. For more information, see [XML Documentation](xml-documentation.md).<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;doc &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/output.md#documentationfile).|
+|`--fullpaths`|Instructs the compiler to generate fully qualified paths.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;fullpaths &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#generatefullpaths).|
+|`--help`<br /><br />`-?`|Displays usage information, including a brief description of all the compiler options.|
+|<code>--highentropyva[+&#124;-]</code>|Enable or disable high-entropy address space layout randomization (ASLR), an enhanced security feature. The OS randomizes the locations in memory where infrastructure for applications (such as the stack and heap) are loaded. If you enable this option, operating systems can use this randomization to use the full 64-bit address-space on a 64-bit machine.|
+|`--keycontainer:key-container-name`|Specifies a strong name key container.|
+|`--keyfile:filename`|Specifies the name of a public key file for signing the generated assembly.|
+|`--lib:folder-name`<br /><br />`-I:folder-name`|Specifies a directory to be searched for assemblies that are referenced.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;lib &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#additionallibpaths).|
+|`--linkresource:resource-info`|Links a specified resource to the assembly. The format of resource-info is <code>filename[name[public&#124;private]]</code><br /><br />Linking a single resource with this option is an alternative to embedding an entire resource file with the `--resource` option.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;linkresource &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/resources.md#linkresources).|
+|`--mlcompatibility`|Ignores warnings that appear when you use features that are designed for compatibility with other versions of ML.|
+|`--noframework`|Disables the default reference to the .NET Framework assembly.|
+|`--nointerfacedata`|Instructs the compiler to omit the resource it normally adds to an assembly that includes F#-specific metadata.|
+|`--nologo`|Doesn't show the banner text when launching the compiler.|
+|`--nooptimizationdata`|Instructs the compiler to only include optimization essential for implementing inlined constructs. Inhibits cross-module inlining but improves binary compatibility.|
+|`--nowin32manifest`|Instructs the compiler to omit the default Win32 manifest.|
+|`--nowarn:warning-number-list`|Disables specific warnings listed by number. Separate each warning number by a comma. You can discover the warning number for any warning from the compilation output.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;nowarn &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/errors-warnings.md#disabledwarnings).|
+|<code>--optimize[+&#124;-][optimization-option-list]</code><br /><br /><code>-O[+&#124;-] [optimization-option-list]</code>|Enables or disables optimizations. Some optimization options can be disabled or enabled selectively by listing them. These are: `nojitoptimize`, `nojittracking`, `nolocaloptimize`, `nocrossoptimize`, `notailcalls`.|
+|`--out:output-filename`<br /><br />`-o:output-filename`|Specifies the name of the compiled assembly or module.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;out &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/output.md#outputassembly).|
+|`--pathmap:path=sourcePath,...`|Specifies how to map physical paths to source path names output by the compiler.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;pathmap &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#pathmap).|
+|`--pdb:pdb-filename`|Names the output debug PDB (program database) file. This option only applies when `--debug` is also enabled.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;pdb &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/advanced.md#pdbfile).|
+|`--platform:platform-name`|Specifies that the generated code will only run on the specified platform (`x86`, `Itanium`, or `x64`), or, if the platform-name `anycpu` is chosen, specifies that the generated code can run on any platform.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;platform &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/output.md#platformtarget).|
+|`--preferreduilang:lang`| Specifies the preferred output language culture name (for example,  `es-ES`, `ja-JP`). |
+|`--quotations-debug`|Specifies that extra debugging information should be emitted for expressions that are derived from F# quotation literals and reflected definitions. The debug information is added to the custom attributes of an F# expression tree node. See [Code Quotations](code-quotations.md) and [Expr.CustomAttributes](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-quotations-fsharpexpr.html#CustomAttributes).|
+|`--reference:assembly-filename`<br /><br />`-r:assembly-filename`|Makes code from an F# or .NET Framework assembly available to the code being compiled.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;reference &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/inputs.md#references).|
+|`--resource:resource-filename`|Embeds a managed resource file into the generated assembly.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;resource &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/resources.md#resources).|
+|`--sig:signature-filename`|Generates a signature file based on the generated assembly. For more information about signature files, see [Signatures](signature-files.md).|
+|`--simpleresolution`|Specifies that assembly references should be resolved using directory-based Mono rules rather than MSBuild resolution. The default is to use MSBuild resolution except when running under Mono.|
+|`--standalone`|Specifies to produce an assembly that contains all of its dependencies so that it runs by itself without the need for additional assemblies, such as the F# library.|
+|`--staticlink:assembly-name`|Statically links the given assembly and all referenced DLLs that depend on this assembly. Use the assembly name, not the DLL name.|
+|`--subsystemversion`|Specifies the version of the OS subsystem to be used by the generated executable. Use 6.02 for Windows 8.1, 6.01 for Windows 7, 6.00 for Windows Vista. This option only applies to executables, not DLLs, and need only be used if your application depends on specific security features available only on certain versions of the OS. If this option is used, and a user attempts to execute your application on a lower version of the OS, it will fail with an error message.|
+|<code>--tailcalls[+&#124;-]</code>|Enables or disables the use of the tail IL instruction, which causes the stack frame to be reused for tail recursive functions. This option is enabled by default.|
+|<code>--target:[exe&#124;winexe&#124;library&#124;module] filename</code>|Specifies the type and file name of the generated compiled code.<ul><li>`exe` means a console application.<br /></li><li>`winexe` means a Windows application, which differs from the console application in that it does not have standard input/output streams (stdin, stdout, and stderr) defined.<br /></li><li>`library` is an assembly without an entry point.<br /></li><li>`module` is a .NET Framework module (.netmodule), which can later be combined with other modules into an assembly.<br /></li><ul/>This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;target &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/output.md#targettype).|
+|`--times`|Displays timing information for compilation.|
+|`--utf8output`|Enables printing compiler output in the UTF-8 encoding.|
+|`--warn:warning-level`|Sets a warning level (0 to 5). The default level is 3. Each warning is given a level based on its severity. Level 5 gives more, but less severe, warnings than level 1.<br /><br />Level 5 warnings are: 21 (recursive use checked at runtime), 22 (`let rec` evaluated out of order), 45 (full abstraction), and 52 (defensive copy). All other warnings are level 2.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;warn &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/errors-warnings.md#warninglevel).|
+|`--warnon:warning-number-list`|Enable specific warnings that might be off by default or disabled by another command-line option. The 1182 (unused variables) warning is off by default.|
+|<code>--warnaserror[+&#124;-] [warning-number-list]</code>|Enables or disables the option to report warnings as errors. You can provide specific warning numbers to be disabled or enabled. Options later in the command line override options earlier in the command line. For example, to specify the warnings that you don't want reported as errors, specify `--warnaserror+` `--warnaserror-:warning-number-list`.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;warnaserror &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/errors-warnings.md#treatwarningsaserrors).|
+|`--win32manifest:manifest-filename`|Adds a Win32 manifest file to the compilation. This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;win32manifest &#40;C&#35; Compiler Options&#41;](../../csharp/language-reference/compiler-options/resources.md#win32manifest).|
+|`--win32res:resource-filename`|Adds a Win32 resource file to the compilation.<br /><br />This compiler option is equivalent to the C# compiler option of the same name. For more information, see [&#47;win32res (&#40;C&#35;) Compiler Options&#41;](../../csharp/language-reference/compiler-options/resources.md#win32resource).|
 
 ## Related articles
 
-<table class="table"><caption class="visually-hidden">Related articles</caption>
-<thead>
-<tr>
-<th>Title</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="fsharp-interactive-options" data-linktype="relative-path">F# Interactive Options</a></td>
-<td>Describes command-line options supported by the F# interpreter, fsi.exe.</td>
-</tr>
-<tr>
-<td><a href="/en-us/visualstudio/ide/reference/project-properties-reference" data-linktype="absolute-path">Project Properties Reference</a></td>
-<td>Describes the UI for projects, including project property pages that provide build options.</td>
-</tr>
-</tbody>
-</table>
-
+|Title|Description|
+|-----|-----------|
+|[F# Interactive Options](fsharp-interactive-options.md)|Describes command-line options supported by the F# interpreter, fsi.exe.|
+|[Project Properties Reference](/visualstudio/ide/reference/project-properties-reference)|Describes the UI for projects, including project property pages that provide build options.|

@@ -1,13 +1,17 @@
 #!markdown
 
+---
+title: Interfaces
+description: Learn how F# Interfaces specify sets of related members that other classes implement.
+ms.date: 08/15/2020
+---
 # Interfaces
 
-<em>Interfaces</em> specify sets of related members that other classes implement.
+*Interfaces* specify sets of related members that other classes implement.
 
 ## Syntax
 
 #!fsharp
-
 // Interface declaration:
 [ attributes ]
 type [accessibility-modifier] interface-name =
@@ -31,8 +35,6 @@ let class-name (argument-list) =
         [ base-interface-definitions ]
     }
     member-list
-
-
 #!markdown
 
 ## Remarks
@@ -43,13 +45,7 @@ The default accessibility for interfaces is `public`.
 
 You can optionally give each method parameter a name using normal F# syntax:
 
-#!fsharp
-
-type ISprintable =
-    abstract member Print : format:string -> unit
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet24032.fs)]
 
 In the above `ISprintable` example, the `Print` method has a single parameter of the type `string` with the name `format`.
 
@@ -62,110 +58,50 @@ The .NET coding style is to begin all interfaces with a capital `I`.
 You can specify multiple parameters in two ways: F#-style and .NET-style. Both will compile the same way for .NET consumers, but F#-style will force F# callers to use F#-style parameter application and .NET-style will force F# callers to use tupled argument application.
 
 #!fsharp
-
 type INumericFSharp =
     abstract Add: x: int -> y: int -> int
 
 type INumericDotNet =
     abstract Add: x: int * y: int -> int
-
-
 #!markdown
 
 ## Implementing Interfaces by Using Class Types
 
 You can implement one or more interfaces in a class type by using the `interface` keyword, the name of the interface, and the `with` keyword, followed by the interface member definitions, as shown in the following code.
 
-#!fsharp
-
-type IPrintable =
-   abstract member Print : unit -> unit
-
-type SomeClass1(x: int, y: float) =
-   interface IPrintable with
-      member this.Print() = printfn "%d %f" x y
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet2801.fs)]
 
 Interface implementations are inherited, so any derived classes do not need to reimplement them.
 
 ## Calling Interface Methods
 
-Interface methods can be called only through the interface, not through any object of the type that implements the interface. Thus, you might have to upcast to the interface type by using the `:&gt;` operator or the `upcast` operator in order to call these methods.
+Interface methods can be called only through the interface, not through any object of the type that implements the interface. Thus, you might have to upcast to the interface type by using the `:>` operator or the `upcast` operator in order to call these methods.
 
 To call the interface method when you have an object of type `SomeClass`, you must upcast the object to the interface type, as shown in the following code.
 
-#!fsharp
-
-let x1 = new SomeClass1(1, 2.0)
-(x1 :> IPrintable).Print()
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet2802.fs)]
 
 An alternative is to declare a method on the object that upcasts and calls the interface method, as in the following example.
 
-#!fsharp
-
-type SomeClass2(x: int, y: float) =
-   member this.Print() = (this :> IPrintable).Print()
-   interface IPrintable with
-      member this.Print() = printfn "%d %f" x y
-
-let x2 = new SomeClass2(1, 2.0)
-x2.Print()
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet2803.fs)]
 
 ## Implementing Interfaces by Using Object Expressions
 
 Object expressions provide a short way to implement an interface. They are useful when you do not have to create a named type, and you just want an object that supports the interface methods, without any additional methods. An object expression is illustrated in the following code.
 
-#!fsharp
-
-let makePrintable(x: int, y: float) =
-    { new IPrintable with
-              member this.Print() = printfn "%d %f" x y }
-let x3 = makePrintable(1, 2.0)
-x3.Print()
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet2804.fs)]
 
 ## Interface Inheritance
 
 Interfaces can inherit from one or more base interfaces.
 
-#!fsharp
-
-type Interface1 =
-    abstract member Method1 : int -> int
-
-type Interface2 =
-    abstract member Method2 : int -> int
-
-type Interface3 =
-    inherit Interface1
-    inherit Interface2
-    abstract member Method3 : int -> int
-
-type MyClass() =
-    interface Interface3 with
-        member this.Method1(n) = 2 * n
-        member this.Method2(n) = n + 100
-        member this.Method3(n) = n / 10
-
-
-#!markdown
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet2805.fs)]
 
 ## Implementing interfaces with default implementations
 
 C# supports defining interfaces with default implementations, like so:
 
-#!fsharp
-
+#!markdowncsharp
 using System;
 
 namespace CSharp
@@ -175,14 +111,11 @@ namespace CSharp
         public int Z => 0;
     }
 }
-
-
 #!markdown
 
 These are directly consumable from F#:
 
 #!fsharp
-
 open CSharp
 
 // You can implement the interface via a class
@@ -197,8 +130,6 @@ printfn $"DIM from C#: %d{md.Z}"
 // You can also implement it via an object expression
 let md' = { new MyDim }
 printfn $"DIM from C# but via Object Expression: %d{md'.Z}"
-
-
 #!markdown
 
 You can override a default implementation with `override`, like overriding any virtual member.
@@ -210,7 +141,6 @@ Any members in an interface that do not have a default implementation must still
 F# supports implementing the same interface at different generic instantiations like so:
 
 #!fsharp
-
 type IA<'T> =
     abstract member Get : unit -> 'T
 
@@ -226,9 +156,10 @@ let iaString = mc :> IA<string>
 
 iaInt.Get() // 1
 iaString.Get() // "hello"
-
-
 #!markdown
 
 ## See also
 
+- [F# Language Reference](index.md)
+- [Object Expressions](object-expressions.md)
+- [Classes](classes.md)

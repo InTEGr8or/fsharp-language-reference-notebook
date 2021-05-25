@@ -1,13 +1,20 @@
 #!markdown
 
+---
+title: Byrefs
+description: Learn about byref and byref-like types in F#, which are used for low-level programming.
+ms.date: 11/04/2019
+---
 # Byrefs
 
 F# has two major feature areas that deal in the space of low-level programming:
 
+* The `byref`/`inref`/`outref` types, which are managed pointers. They have restrictions on usage so that you cannot compile a program that is invalid at run time.
+* A `byref`-like struct, which is a [structure](structures.md) that has similar semantics and the same compile-time restrictions as `byref<'T>`. One example is <xref:System.Span%601>.
+
 ## Syntax
 
 #!fsharp
-
 // Byref types as parameters
 let f (x: byref<'T>) = ()
 let g (x: inref<'T>) = ()
@@ -24,22 +31,23 @@ open System.Runtime.CompilerServices
 type S(count1: int, count2: int) =
     member x.Count1 = count1
     member x.Count2 = count2
-
-
 #!markdown
 
 ## Byref, inref, and outref
 
 There are three forms of `byref`:
 
-A `byref&lt;'T&gt;` can be passed where an `inref&lt;'T&gt;` is expected. Similarly, a `byref&lt;'T&gt;` can be passed where an `outref&lt;'T&gt;` is expected.
+* `inref<'T>`, a managed pointer for reading the underlying value.
+* `outref<'T>`, a managed pointer for writing to the underlying value.
+* `byref<'T>`, a managed pointer for reading and writing the underlying value.
+
+A `byref<'T>` can be passed where an `inref<'T>` is expected. Similarly, a `byref<'T>` can be passed where an `outref<'T>` is expected.
 
 ## Using byrefs
 
-To use a `inref&lt;'T&gt;`, you need to get a pointer value with `&amp;`:
+To use a `inref<'T>`, you need to get a pointer value with `&`:
 
 #!fsharp
-
 open System
 
 let f (dt: inref<DateTime>) =
@@ -48,14 +56,11 @@ let f (dt: inref<DateTime>) =
 let usage =
     let dt = DateTime.Now
     f &dt // Pass a pointer to 'dt'
-
-
 #!markdown
 
-To write to the pointer by using an `outref&lt;'T&gt;` or `byref&lt;'T&gt;`, you must also make the value you grab a pointer to `mutable`.
+To write to the pointer by using an `outref<'T>` or `byref<'T>`, you must also make the value you grab a pointer to `mutable`.
 
 #!fsharp
-
 open System
 
 let f (dt: byref<DateTime>) =
@@ -67,95 +72,67 @@ let mutable dt = DateTime.Now
 
 // Now you can pass the pointer to 'dt'
 f &dt
-
-
 #!markdown
 
-If you are only writing the pointer instead of reading it, consider using `outref&lt;'T&gt;` instead of `byref&lt;'T&gt;`.
+If you are only writing the pointer instead of reading it, consider using `outref<'T>` instead of `byref<'T>`.
+
+### Inref semantics
 
 Consider the following code:
 
 #!fsharp
-
 let f (x: inref<SomeStruct>) = x.SomeField
-
-
 #!markdown
 
 Semantically, this means the following:
 
+* The holder of the `x` pointer may only use it to read the value.
+* Any pointer acquired to `struct` fields nested within `SomeStruct` are given type `inref<_>`.
+
 The following is also true:
 
-However, for F# value types that <strong>are</strong> immutable, the `this` pointer is inferred to be an `inref`.
+* There is no implication that other threads or aliases do not have write access to `x`.
+* There is no implication that `SomeStruct` is immutable by virtue of `x` being an `inref`.
+
+However, for F# value types that **are** immutable, the `this` pointer is inferred to be an `inref`.
 
 All of these rules together mean that the holder of an `inref` pointer may not modify the immediate contents of the memory being pointed to.
 
-The purpose of `outref&lt;'T&gt;` is to indicate that the pointer should only be written to. Unexpectedly, `outref&lt;'T&gt;` permits reading the underlying value despite its name. This is for compatibility purposes. Semantically, `outref&lt;'T&gt;` is no different than `byref&lt;'T&gt;`.
+### Outref semantics
+
+The purpose of `outref<'T>` is to indicate that the pointer should only be written to. Unexpectedly, `outref<'T>` permits reading the underlying value despite its name. This is for compatibility purposes. Semantically, `outref<'T>` is no different than `byref<'T>`.
+
+### Interop with C\#
 
 C# supports the `in ref` and `out ref` keywords, in addition to `ref` returns. The following table shows how F# interprets what C# emits:
 
-<table class="table"><caption class="visually-hidden">Interop with C#</caption>
-<thead>
-<tr>
-<th>C# construct</th>
-<th>F# infers</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`ref` return value</td>
-<td>`outref&lt;'T&gt;`</td>
-</tr>
-<tr>
-<td>`ref readonly` return value</td>
-<td>`inref&lt;'T&gt;`</td>
-</tr>
-<tr>
-<td>`in ref` parameter</td>
-<td>`inref&lt;'T&gt;`</td>
-</tr>
-<tr>
-<td>`out ref` parameter</td>
-<td>`outref&lt;'T&gt;`</td>
-</tr>
-</tbody>
-</table>
+|C# construct|F# infers|
+|------------|---------|
+|`ref` return value|`outref<'T>`|
+|`ref readonly` return value|`inref<'T>`|
+|`in ref` parameter|`inref<'T>`|
+|`out ref` parameter|`outref<'T>`|
 
 The following table shows what F# emits:
 
-<table class="table"><caption class="visually-hidden">Interop with C#</caption>
-<thead>
-<tr>
-<th>F# construct</th>
-<th>Emitted construct</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`inref&lt;'T&gt;` argument</td>
-<td>`[In]` attribute on argument</td>
-</tr>
-<tr>
-<td>`inref&lt;'T&gt;` return</td>
-<td>`modreq` attribute on value</td>
-</tr>
-<tr>
-<td>`inref&lt;'T&gt;` in abstract slot or implementation</td>
-<td>`modreq` on argument or return</td>
-</tr>
-<tr>
-<td>`outref&lt;'T&gt;` argument</td>
-<td>`[Out]` attribute on argument</td>
-</tr>
-</tbody>
-</table>
+|F# construct|Emitted construct|
+|------------|-----------------|
+|`inref<'T>` argument|`[In]` attribute on argument|
+|`inref<'T>` return|`modreq` attribute on value|
+|`inref<'T>` in abstract slot or implementation|`modreq` on argument or return|
+|`outref<'T>` argument|`[Out]` attribute on argument|
 
-An `inref&lt;'T&gt;` type is inferred by the F# compiler in the following cases:
+### Type inference and overloading rules
 
-When an implicit address of an `inref` is being taken, an overload with an argument of type `SomeType` is preferred to an overload with an argument of type `inref&lt;SomeType&gt;`. For example:
+An `inref<'T>` type is inferred by the F# compiler in the following cases:
+
+1. A .NET parameter or return type that has an `IsReadOnly` attribute.
+2. The `this` pointer on a struct type that has no mutable fields.
+3. The address of a memory location derived from another `inref<_>` pointer.
+
+When an implicit address of an `inref` is being taken, an overload with an argument of type `SomeType` is preferred to an overload with an argument of type `inref<SomeType>`. For example:
 
 #!fsharp
-
 type C() =
     static member M(x: System.DateTime) = x.AddDays(1.0)
     static member M(x: inref<System.DateTime>) = x.AddDays(2.0)
@@ -165,18 +142,15 @@ type C() =
 let res = System.DateTime.Now
 let v =  C.M(res)
 let v2 =  C.M2(res, 4)
-
-
 #!markdown
 
-In both cases, the overloads taking `System.DateTime` are resolved rather than the overloads taking `inref&lt;System.DateTime&gt;`.
+In both cases, the overloads taking `System.DateTime` are resolved rather than the overloads taking `inref<System.DateTime>`.
 
 ## Byref-like structs
 
-In addition to the `byref`/`inref`/`outref` trio, you can define your own structs that can adhere to `byref`-like semantics. This is done with the <a href="/en-us/dotnet/api/system.runtime.compilerservices.isbyreflikeattribute" data-linktype="absolute-path">IsByRefLikeAttribute</a> attribute:
+In addition to the `byref`/`inref`/`outref` trio, you can define your own structs that can adhere to `byref`-like semantics. This is done with the <xref:System.Runtime.CompilerServices.IsByRefLikeAttribute> attribute:
 
 #!fsharp
-
 open System
 open System.Runtime.CompilerServices
 
@@ -184,15 +158,18 @@ open System.Runtime.CompilerServices
 type S(count1: Span<int>, count2: Span<int>) =
     member x.Count1 = count1
     member x.Count2 = count2
-
-
 #!markdown
 
 `IsByRefLike` does not imply `Struct`. Both must be present on the type.
 
 A "`byref`-like" struct in F# is a stack-bound value type. It is never allocated on the managed heap. A `byref`-like struct is useful for high-performance programming, as it is enforced with set of strong checks about lifetime and non-capture. The rules are:
 
-This last point is crucial for F# pipeline-style programming, as `|&gt;` is a generic function that parameterizes its input types. This restriction may be relaxed for `|&gt;` in the future, as it is inline and does not make any calls to non-inlined generic functions in its body.
+* They can be used as function parameters, method parameters, local variables, method returns.
+* They cannot be static or instance members of a class or normal struct.
+* They cannot be captured by any closure construct (`async` methods or lambda expressions).
+* They cannot be used as a generic parameter.
+
+This last point is crucial for F# pipeline-style programming, as `|>` is a generic function that parameterizes its input types. This restriction may be relaxed for `|>` in the future, as it is inline and does not make any calls to non-inlined generic functions in its body.
 
 Although these rules strongly restrict usage, they do so to fulfill the promise of high-performance computing in a safe manner.
 
@@ -201,34 +178,27 @@ Although these rules strongly restrict usage, they do so to fulfill the promise 
 Byref returns from F# functions or members can be produced and consumed. When consuming a `byref`-returning method, the value is implicitly dereferenced. For example:
 
 #!fsharp
-
 let squareAndPrint (data : byref<int>) =
     let squared = data*data    // data is implicitly dereferenced
     printfn $"%d{squared}"
-
-
 #!markdown
 
 To return a value byref, the variable that contains the value must live longer than the current scope.
-Also, to return byref, use `&amp;value` (where value is a variable that lives longer than the current scope).
+Also, to return byref, use `&value` (where value is a variable that lives longer than the current scope).
 
 #!fsharp
-
 let mutable sum = 0
 let safeSum (bytes: Span<byte>) =
     for i in 0 .. bytes.Length - 1 do
         sum <- sum + int bytes.[i]
     &sum  // sum lives longer than the scope of this function.
-
-
 #!markdown
 
-To avoid the implicit dereference, such as passing a reference through multiple chained calls, use `&amp;x` (where `x` is the value).
+To avoid the implicit dereference, such as passing a reference through multiple chained calls, use `&x` (where `x` is the value).
 
 You can also directly assign to a return `byref`. Consider the following (highly imperative) program:
 
 #!fsharp
-
 type C() =
     let mutable nums = [| 1; 3; 7; 15; 31; 63; 127; 255; 511; 1023 |]
 
@@ -253,18 +223,13 @@ let main argv =
     printfn $"New sequence:      %O{c}"
 
     0 // return an integer exit code
-
-
 #!markdown
 
 This is the output:
 
-#!fsharp
-
+#!share
 Original sequence: 1 3 7 15 31 63 127 255 511 1023
 New sequence:      1 3 7 30 31 63 127 255 511 1023
-
-
 #!markdown
 
 ## Scoping for byrefs
@@ -272,7 +237,6 @@ New sequence:      1 3 7 30 31 63 127 255 511 1023
 A `let`-bound value cannot have its reference exceed the scope in which it was defined. For example, the following is disallowed:
 
 #!fsharp
-
 let test2 () =
     let x = 12
     &x // Error: 'x' exceeds its defined scope!
@@ -282,9 +246,6 @@ let test () =
         let y = 1
         &y // Error: `y` exceeds its defined scope!
     ()
-
-
 #!markdown
 
 This prevents you from getting different results depending on if you compile with optimizations or not.
-

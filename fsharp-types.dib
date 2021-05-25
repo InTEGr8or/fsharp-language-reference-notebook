@@ -1,12 +1,17 @@
 #!markdown
 
+---
+title: Types
+description: Learn about the types that are used in F# and how F# types are named and described.
+ms.date: 08/15/2020
+---
 # F# Types
 
 This topic describes the types that are used in F# and how F# types are named and described.
 
 ## Summary of F# Types
 
-Some types are considered <em>primitive types</em>, such as the Boolean type `bool` and integral and floating point types of various sizes, which include types for bytes and characters. These types are described in <a href="basic-types" data-linktype="relative-path">Primitive Types</a>.
+Some types are considered *primitive types*, such as the Boolean type `bool` and integral and floating point types of various sizes, which include types for bytes and characters. These types are described in [Primitive Types](basic-types.md).
 
 Other types that are built into the language include tuples, lists, arrays, sequences, records, and discriminated unions. If you have experience with other .NET languages and are learning F#, you should read the topics for each of these types. These F#-specific types support styles of programming that are common to functional programming languages. Many of these types have associated modules in the F# library that support common operations on these types.
 
@@ -14,9 +19,9 @@ The type of a function includes information about the parameter types and return
 
 The .NET Framework is the source of object types, interface types, delegate types, and others. You can define your own object types just as you can in any other .NET language.
 
-Also, F# code can define aliases, which are named <em>type abbreviations</em>, that are alternative names for types. You might use type abbreviations when the type might change in the future and you want to avoid changing the code that depends on the type. Or, you might use a type abbreviation as a friendly name for a type that can make code easier to read and understand.
+Also, F# code can define aliases, which are named *type abbreviations*, that are alternative names for types. You might use type abbreviations when the type might change in the future and you want to avoid changing the code that depends on the type. Or, you might use a type abbreviation as a friendly name for a type that can make code easier to read and understand.
 
-F# provides useful collection types that are designed with functional programming in mind. Using these collection types helps you write code that is more functional in style. For more information, see <a href="fsharp-collection-types" data-linktype="relative-path">F# Collection Types</a>.
+F# provides useful collection types that are designed with functional programming in mind. Using these collection types helps you write code that is more functional in style. For more information, see [F# Collection Types](fsharp-collection-types.md).
 
 ## Syntax for Types
 
@@ -24,171 +29,42 @@ In F# code, you often have to write out the names of types. Every type has a syn
 
 The following table shows aspects of the type syntax for F# types.
 
-<table class="table"><caption class="visually-hidden">Syntax for Types</caption>
-<thead>
-<tr>
-<th>Type</th>
-<th>Type syntax</th>
-<th>Examples</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>primitive type</td>
-<td><em>type-name</em></td>
-<td>`int`<br><br>`float`<br><br>`string`</td>
-</tr>
-<tr>
-<td>aggregate type (class, structure, union, record, enum, and so on)</td>
-<td><em>type-name</em></td>
-<td>`System.DateTime`<br><br>`Color`</td>
-</tr>
-<tr>
-<td>type abbreviation</td>
-<td><em>type-abbreviation-name</em></td>
-<td>`bigint`</td>
-</tr>
-<tr>
-<td>fully qualified type</td>
-<td><em>namespaces.type-name</em><br><br>or<br><br><em>modules.type-name</em><br><br>or<br><br><em>namespaces.modules.type-name</em></td>
-<td>`System.IO.StreamWriter`</td>
-</tr>
-<tr>
-<td>array</td>
-<td><em>type-name</em>[] or<br><br><em>type-name</em> array</td>
-<td>`int[]`<br><br>`array&lt;int&gt;`<br><br>`int array`</td>
-</tr>
-<tr>
-<td>two-dimensional array</td>
-<td><em>type-name</em>[,]</td>
-<td>`int[,]`<br><br>`float[,]`</td>
-</tr>
-<tr>
-<td>three-dimensional array</td>
-<td><em>type-name</em>[,,]</td>
-<td>`float[,,]`</td>
-</tr>
-<tr>
-<td>tuple</td>
-<td><em>type-name1</em> * <em>type-name2</em> ...</td>
-<td>For example, `(1,'b',3)` has type `int * char * int`</td>
-</tr>
-<tr>
-<td>generic type</td>
-<td><em>type-parameter</em> <em>generic-type-name</em><br><br>or<br><br><em>generic-type-name</em>&lt;<em>type-parameter-list</em>&gt;</td>
-<td>`'a list`<br><br>`list&lt;'a&gt;`<br><br>`Dictionary&lt;'key, 'value&gt;`</td>
-</tr>
-<tr>
-<td>constructed type (a generic type that has a specific type argument supplied)</td>
-<td><em>type-argument</em> <em>generic-type-name</em><br><br>or<br><br><em>generic-type-name</em>&lt;<em>type-argument-list</em>&gt;</td>
-<td>`int option`<br><br>`string list`<br><br>`int ref`<br><br>`option&lt;int&gt;`<br><br>`list&lt;string&gt;`<br><br>`ref&lt;int&gt;`<br><br>`Dictionary&lt;int, string&gt;`</td>
-</tr>
-<tr>
-<td>function type that has a single parameter</td>
-<td><em>parameter-type1</em> -&gt; <em>return-type</em></td>
-<td>A function that takes an `int` and returns a `string` has type `int -&gt; string`</td>
-</tr>
-<tr>
-<td>function type that has multiple parameters</td>
-<td><em>parameter-type1</em> -&gt; <em>parameter-type2</em> -&gt; ... -&gt; <em>return-type</em></td>
-<td>A function that takes an `int` and a `float` and returns a `string` has type `int -&gt; float -&gt; string`</td>
-</tr>
-<tr>
-<td>higher order function as a parameter</td>
-<td>(<em>function-type</em>)</td>
-<td>`List.map` has type `('a -&gt; 'b) -&gt; 'a list -&gt; 'b list`</td>
-</tr>
-<tr>
-<td>delegate</td>
-<td>delegate of <em>function-type</em></td>
-<td>`delegate of unit -&gt; int`</td>
-</tr>
-<tr>
-<td>flexible type</td>
-<td>#<em>type-name</em></td>
-<td>`#System.Windows.Forms.Control`<br><br>`#seq&lt;int&gt;`</td>
-</tr>
-</tbody>
-</table>
+|Type|Type syntax|Examples|
+|----|-----------|--------|
+|primitive type|*type-name*|`int`<br /><br />`float`<br /><br />`string`|
+|aggregate type (class, structure, union, record, enum, and so on)|*type-name*|`System.DateTime`<br /><br />`Color`|
+|type abbreviation|*type-abbreviation-name*|`bigint`|
+|fully qualified type|*namespaces.type-name*<br /><br />or<br /><br />*modules.type-name*<br /><br />or<br /><br />*namespaces.modules.type-name*|`System.IO.StreamWriter`|
+|array|*type-name*[] or<br /><br />*type-name* array|`int[]`<br /><br />`array<int>`<br /><br />`int array`|
+|two-dimensional array|*type-name*[,]|`int[,]`<br /><br />`float[,]`|
+|three-dimensional array|*type-name*[,,]|`float[,,]`|
+|tuple|*type-name1* &#42; *type-name2* ...|For example, `(1,'b',3)` has type `int * char * int`|
+|generic type|*type-parameter* *generic-type-name*<br /><br />or<br /><br />*generic-type-name*&lt;*type-parameter-list*&gt;|`'a list`<br /><br />`list<'a>`<br /><br />`Dictionary<'key, 'value>`|
+|constructed type (a generic type that has a specific type argument supplied)|*type-argument* *generic-type-name*<br /><br />or<br /><br />*generic-type-name*&lt;*type-argument-list*&gt;|`int option`<br /><br />`string list`<br /><br />`int ref`<br /><br />`option<int>`<br /><br />`list<string>`<br /><br />`ref<int>`<br /><br />`Dictionary<int, string>`|
+|function type that has a single parameter|*parameter-type1* -&gt; *return-type*|A function that takes an `int` and returns a `string` has type `int -> string`|
+|function type that has multiple parameters|*parameter-type1* -&gt; *parameter-type2* -&gt; ... -&gt; *return-type*|A function that takes an `int` and a `float` and returns a `string` has type `int -> float -> string`|
+|higher order function as a parameter|(*function-type*)|`List.map` has type `('a -> 'b) -> 'a list -> 'b list`|
+|delegate|delegate of *function-type*|`delegate of unit -> int`|
+|flexible type|#*type-name*|`#System.Windows.Forms.Control`<br /><br />`#seq<int>`|
 
 ## Related Topics
 
-<table class="table"><caption class="visually-hidden">Related Topics</caption>
-<thead>
-<tr>
-<th>Topic</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="basic-types" data-linktype="relative-path">Primitive Types</a></td>
-<td>Describes built-in simple types such as integral types, the Boolean type, and character types.</td>
-</tr>
-<tr>
-<td><a href="unit-type" data-linktype="relative-path">Unit Type</a></td>
-<td>Describes the `unit` type, a type that has one value and that is indicated by (); equivalent to `void` in C# and `Nothing` in Visual Basic.</td>
-</tr>
-<tr>
-<td><a href="tuples" data-linktype="relative-path">Tuples</a></td>
-<td>Describes the tuple type, a type that consists of associated values of any type grouped in pairs, triples, quadruples, and so on.</td>
-</tr>
-<tr>
-<td><a href="options" data-linktype="relative-path">Options</a></td>
-<td>Describes the option type, a type that may either have a value or be empty.</td>
-</tr>
-<tr>
-<td><a href="lists" data-linktype="relative-path">Lists</a></td>
-<td>Describes lists, which are ordered, immutable series of elements all of the same type.</td>
-</tr>
-<tr>
-<td><a href="arrays" data-linktype="relative-path">Arrays</a></td>
-<td>Describes arrays, which are ordered sets of mutable elements of the same type that occupy a contiguous block of memory and are of fixed size.</td>
-</tr>
-<tr>
-<td><a href="sequences" data-linktype="relative-path">Sequences</a></td>
-<td>Describes the sequence type, which represents a logical series of values; individual values are computed only as necessary.</td>
-</tr>
-<tr>
-<td><a href="records" data-linktype="relative-path">Records</a></td>
-<td>Describes the record type, a small aggregate of named values.</td>
-</tr>
-<tr>
-<td><a href="discriminated-unions" data-linktype="relative-path">Discriminated Unions</a></td>
-<td>Describes the discriminated union type, a type whose values can be any one of a set of possible types.</td>
-</tr>
-<tr>
-<td><a href="functions/" data-linktype="relative-path">Functions</a></td>
-<td>Describes function values.</td>
-</tr>
-<tr>
-<td><a href="classes" data-linktype="relative-path">Classes</a></td>
-<td>Describes the class type, an object type that corresponds to a .NET reference type. Class types can contain members, properties, implemented interfaces, and a base type.</td>
-</tr>
-<tr>
-<td><a href="structures" data-linktype="relative-path">Structures</a></td>
-<td>Describes the `struct` type, an object type that corresponds to a .NET value type. The `struct` type usually represents a small aggregate of data.</td>
-</tr>
-<tr>
-<td><a href="interfaces" data-linktype="relative-path">Interfaces</a></td>
-<td>Describes interface types, which are types that represent a set of members that provide certain functionality but that contain no data. An interface type must be implemented by an object type to be useful.</td>
-</tr>
-<tr>
-<td><a href="delegates" data-linktype="relative-path">Delegates</a></td>
-<td>Describes the delegate type, which represents a function as an object.</td>
-</tr>
-<tr>
-<td><a href="enumerations" data-linktype="relative-path">Enumerations</a></td>
-<td>Describes enumeration types, whose values belong to a set of named values.</td>
-</tr>
-<tr>
-<td><a href="attributes" data-linktype="relative-path">Attributes</a></td>
-<td>Describes attributes, which are used to specify metadata for another type.</td>
-</tr>
-<tr>
-<td><a href="exception-handling/exception-types" data-linktype="relative-path">Exception Types</a></td>
-<td>Describes exceptions, which specify error information.</td>
-</tr>
-</tbody>
-</table>
-
+|Topic|Description|
+|-----|-----------|
+|[Primitive Types](basic-types.md)|Describes built-in simple types such as integral types, the Boolean type, and character types.|
+|[Unit Type](unit-type.md)|Describes the `unit` type, a type that has one value and that is indicated by (); equivalent to `void` in C# and `Nothing` in Visual Basic.|
+|[Tuples](tuples.md)|Describes the tuple type, a type that consists of associated values of any type grouped in pairs, triples, quadruples, and so on.|
+|[Options](options.md)|Describes the option type, a type that may either have a value or be empty.|
+|[Lists](lists.md)|Describes lists, which are ordered, immutable series of elements all of the same type.|
+|[Arrays](arrays.md)|Describes arrays, which are ordered sets of mutable elements of the same type that occupy a contiguous block of memory and are of fixed size.|
+|[Sequences](sequences.md)|Describes the sequence type, which represents a logical series of values; individual values are computed only as necessary.|
+|[Records](records.md)|Describes the record type, a small aggregate of named values.|
+|[Discriminated Unions](discriminated-unions.md)|Describes the discriminated union type, a type whose values can be any one of a set of possible types.|
+|[Functions](./functions/index.md)|Describes function values.|
+|[Classes](classes.md)|Describes the class type, an object type that corresponds to a .NET reference type. Class types can contain members, properties, implemented interfaces, and a base type.|
+|[Structures](structures.md)|Describes the `struct` type, an object type that corresponds to a .NET value type. The `struct` type usually represents a small aggregate of data.|
+|[Interfaces](interfaces.md)|Describes interface types, which are types that represent a set of members that provide certain functionality but that contain no data. An interface type must be implemented by an object type to be useful.|
+|[Delegates](delegates.md)|Describes the delegate type, which represents a function as an object.|
+|[Enumerations](enumerations.md)|Describes enumeration types, whose values belong to a set of named values.|
+|[Attributes](attributes.md)|Describes attributes, which are used to specify metadata for another type.|
+|[Exception Types](./exception-handling/exception-types.md)|Describes exceptions, which specify error information.|
