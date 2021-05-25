@@ -29,3 +29,7 @@ I added links back to the original content, which helped me verify the product a
 For now I have placed all content into the root dir, but if I add other Notebooks with other content (likely) I will place the Language Reference into it's own folder.
 
 My F# non-skills prevented clean code, but I at least got it functioning, and in fewer lines than the JS!
+
+In my clever plan of using F# to scrape the backend GitHub repo directly I failed to notice the many code refs that look like `[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet5501.fs)]` in the Markdown. The front-end Language reference _also_ uses many AJAX automations which obscure the actual content. Not sure how one would "Edit" the Language Reference with the **Edit* button on the sites, since much of the code is in a link that returns 404 Not Found, such as this page [Exception Types](https://github.com/dotnet/docs/blob/main/docs/fsharp/language-reference/exception-handling/exception-types.md).
+
+For now, my JS scraper works better, but requires me to visit each page manually. Figuring out how to accomidate AJAX operations in F# will have to be my next task. I'll create a side branch from the earlier commit with working notebooks.
