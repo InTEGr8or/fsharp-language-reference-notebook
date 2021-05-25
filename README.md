@@ -35,3 +35,5 @@ My F# non-skills prevented clean code, but I at least got it functioning, and in
 In my clever plan of using F# to scrape the backend GitHub repo directly I failed to notice the many code refs that look like `[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet5501.fs)]` in the Markdown. The front-end Language reference _also_ uses many AJAX automations which obscure the actual content. Not sure how one would "Edit" the Language Reference with the **Edit* button on the sites, since much of the code is in a link that returns 404 Not Found, such as this page [Exception Types](https://github.com/dotnet/docs/blob/main/docs/fsharp/language-reference/exception-handling/exception-types.md).
 
 For now, my JS scraper works better, but requires me to visit each page manually. Figuring out how to accomidate AJAX operations in F# will have to be my next task. I'll create a side branch from the earlier commit with working notebooks.
+
+F# scraping is in `main` now, and the working notebooks are still here in `master`.
