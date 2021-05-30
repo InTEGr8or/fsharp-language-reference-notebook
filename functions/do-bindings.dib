@@ -13,12 +13,10 @@ A `do` binding is used to execute code without defining a function or value. Als
 
 ## Syntax
 
-#!fsharp
-
+#!fsharp\n
 [ attributes ]
 [ do ]expression
-#!markdown
-
+#!markdown\n
 
 ## Remarks
 

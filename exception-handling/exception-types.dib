@@ -13,11 +13,9 @@ There are two categories of exceptions in F#: .NET exception types and F# except
 
 ## Syntax
 
-#!fsharp
-
+#!fsharp\n
 exception exception-type of argument-type
-#!markdown
-
+#!markdown\n
 
 ## Remarks
 

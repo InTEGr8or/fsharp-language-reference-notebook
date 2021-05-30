@@ -13,11 +13,9 @@ The `failwith` function generates an F# exception.
 
 ## Syntax
 
-#!fsharp
-
+#!fsharp\n
 failwith error-message-string
-#!markdown
-
+#!markdown\n
 
 ## Remarks
 

@@ -22,11 +22,9 @@ The following code demonstrates the error:
 
 This code results in the following output:
 
-#!markdown
-text
+#!markdown\ntext
 error FS0002: This function takes too many arguments, or is used in a context where a function is not expected
-#!markdown
-
+#!markdown\n
 
 Here, the type of `ignoreInt` is defined to be a function of `int -> unit`, but a lambda of type `int -> int` is passed instead. Because `int -> int` is not the same type as `int` this message is reported.
 

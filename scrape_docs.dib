@@ -1,16 +1,70 @@
+#!fsharp
+
 #r "nuget: FSharp.Data, 4.0.1"
 open FSharp.Data
+#r "nuget: canopy, 2.1.5"
+open canopy.runner.classic
+open canopy.configuration
+open canopy.classic
+#r "nuget: Selenium.WebDriver.ChromeDriver, 91.0.4472.1900"
 open System.IO
 open System.Text.RegularExpressions
 
-let LanguageRefUrl = "https://github.com/dotnet/docs/tree/main/docs/fsharp/language-reference"
+#!markdown
+
+You might need to to upgrade Chrome by opening Chrome and going to Settings > About Chrome, or going to:
+
+[Google Chrome Web Browser](https://www.google.com/chrome/thank-you.html?statcb=1&installdataindex=empty&defaultbrowser=0)
+
+#!fsharp
+
+let LanguageRefUrl = "https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/"
+let LanguageRefDocsUrl = "https://github.com/dotnet/docs/tree/main/docs/fsharp/language-reference"
 let githubRootUrl = "https://github.com/"
 let RawFileRootUrl = "https://raw.githubusercontent.com/"
-let listSelector = "div.js-details-container.Details div.py-2 a.Link--primary"
+let linksElements = "div.js-details-container.Details div.py-2 a.Link--primary"
+let listSelector = "#title-7-1 > ul > li"
+let expandSelector = ".tree-item"
+let chromedriverDir = "C:/Users/xgenx/.nuget/packages/microsoft.dotnet-interactive/1.0.225602/tools/net5.0/any"
+
+canopy.configuration.chromeDir <- System.AppContext.BaseDirectory
+
+//start an instance of chrome
+let browser = start chrome
+url LanguageRefUrl
+// let content = read linksElements
+let title = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0]
+
+let hasAnchor element =
+    match element |> someElementWithin "a" with
+    | Some(_) -> true
+    | None -> false
+
+let hasExpand element =
+    let classes = element.GetAttribute("class")
+    match classes.Contains(expandSelector) with
+    | Some(_) -> true
+    | None -> false
+
+let followLink element = 
+    element
+
+title |> printf "Title: %A" 
+
+let toc = element "#title-7-1 > ul" 
+
+#!fsharp
+
+toc |> elementsWithin "li" 
+    |> List.iter (fun element -> ( if(hasExpand element) then (element |> elementWithin "span" |> click ) else printf "" ))
+
+#!fsharp
+
+Collections.ObjectModel.ReadOnlyCollection<OpenQA.Selenium.IWebElement>
+
 let topics = HtmlDocument.Load(LanguageRefUrl).CssSelect(listSelector)
 
 let links = topics |> List.map(fun a -> (a.AttributeValue("href")))
-type Links = string seq
 
 let rec ReadDocs links folder =
     for (link:string) in links do

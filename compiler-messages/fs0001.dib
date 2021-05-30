@@ -1,6 +1,7 @@
 #!markdown
 
-[](https://github.com//dotnet/docs/blob/main/docs/fsharp/language-reference/compiler-messages/fs0001.md)
+["Compiler error FS0001"
+](https://github.com//dotnet/docs/blob/main/docs/fsharp/language-reference/compiler-messages/fs0001.md)
 ---
 description: "Learn more about: FS0001: Error from adding type equation"
 title: "Compiler error FS0001"
@@ -21,14 +22,12 @@ The following code demonstrates a simple version of the error:
 
 This code results in the following output:
 
-#!markdown
-text
+#!markdown\ntext
 error FS0001: This expression was expected to have type
     'bool'
 but here has type
     'int'
-#!markdown
-
+#!markdown\n
 
 Here, the type of the `booleanBinding` is required to be `bool` by the type annotation. However the value `10` is inferred to be `int`. Because `int` is not the same as `bool`, this message is reported.
 

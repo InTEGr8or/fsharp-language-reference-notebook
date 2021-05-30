@@ -13,12 +13,10 @@ This topic describes the method that you use to set the entry point to an F# pro
 
 ## Syntax
 
-#!fsharp
-
+#!fsharp\n
 [<EntryPoint>]
 let-function-binding
-#!markdown
-
+#!markdown\n
 
 ## Remarks
 
@@ -34,11 +32,9 @@ The following example illustrates a simple `main` function.
 
 When this code is executed with the command line `EntryPoint.exe 1 2 3`, the output is as follows.
 
-#!markdown
-console
+#!markdown\nconsole
 Arguments passed to function : [|"1"; "2"; "3"|]
-#!markdown
-
+#!markdown\n
 
 ## Implicit Entry Point
 
