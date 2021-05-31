@@ -3,10 +3,12 @@
 #r "nuget: FSharp.Data, 4.0.1"
 open FSharp.Data
 #r "nuget: canopy, 2.1.5"
-open canopy.runner.classic
+open canopy.runner
 open canopy.configuration
-open canopy.classic
+open canopy
+#r "nuget: Selenium.WebDriver, 3.141.0"
 #r "nuget: Selenium.WebDriver.ChromeDriver, 91.0.4472.1900"
+open OpenQA.Selenium
 open System.IO
 open System.Text.RegularExpressions
 
@@ -27,36 +29,57 @@ let listSelector = "#title-7-1 > ul > li"
 let expandSelector = ".tree-item"
 let chromedriverDir = "C:/Users/xgenx/.nuget/packages/microsoft.dotnet-interactive/1.0.225602/tools/net5.0/any"
 
-canopy.configuration.chromeDir <- System.AppContext.BaseDirectory
+canopy.configuration.chromeDir <- chromedriverDir
 
 //start an instance of chrome
 let browser = start chrome
 url LanguageRefUrl
 // let content = read linksElements
 let title = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0]
+title |> printf "Title: %A" 
+
+#!fsharp
 
 let hasAnchor element =
     match element |> someElementWithin "a" with
     | Some(_) -> true
     | None -> false
 
-let hasExpand element =
-    let classes = element.GetAttribute("class")
-    match classes.Contains(expandSelector) with
-    | Some(_) -> true
-    | None -> false
+// let hasExpand (element: Selenium.IWebElement) =
+//     let classes = element.GetAttribute("class")
+//     match classes with
+//     | Some(_) -> true
+//     | None -> false
 
 let followLink element = 
     element
 
-title |> printf "Title: %A" 
 
 let toc = element "#title-7-1 > ul" 
+let tocItems = toc |> elementsWithin "li"
+let folderItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") > -1) 
+let pageItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") = -1)
+// let pageLinks = List.map (fun item -> item |)
+folderItems |> List.iter (fun item -> item |> elementWithin "span" |> click) 
+let pageLinks = pageItems |> List.map (fun item -> (item |> elementWithin "a").GetAttribute("href"))
 
 #!fsharp
 
-toc |> elementsWithin "li" 
-    |> List.iter (fun element -> ( if(hasExpand element) then (element |> elementWithin "span" |> click ) else printf "" ))
+url pageLinks.[8]
+let mainContent = elements "main#main.content code.lang-fsharp"
+printf "%s" (mainContent.[3].GetProperty("innerText"))
+// mainContent |> List.iter (fun pre -> pre.GetProperty("innterHTML") |> printf "%s")
+// mainContent.GetProperty("children") 
+//     |> List.filter (fun child -> child.GetProperty("innerHTML").indexOf("<pre>") > -1) 
+//     |> List.iter (fun pre -> printf ("%A" (pre.GetProperty("innerText")))) 
+
+#!fsharp
+
+tocItems |> List.iter (fun element -> ( 
+    if element.GetAttribute("class") = "tree-item" then (
+        element |> elementWithin "span" |> click 
+    ) else element |> elementsWithin("a") |> printf "%A" 
+))
 
 #!fsharp
 
