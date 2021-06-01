@@ -1,3 +1,31 @@
+#!markdown
+
+# Web Page Scraping with Canopy
+
+As far as I know, the only way to overcome AJAX-loaded data problem when scraping webpages is by using Selenium to control a web browser and use that to inspect the resultant DOM.
+
+There might be some Node.js tools that mimick the browser JS engine, but I think I will try to call them from F# if I need to use anything like that.
+
+## Choosing a Source
+
+The F# Language Reference is presented on the MS Documentation webpage, which is stored in a GitHub repo, which is presented as a web repo, available as "raw content" through the web repo, and is clonable to a local repo which can be accessed through local file access with `System.IO`.
+
+I like the whole "everything is local" idea of accessing the data through the GitHub repo, cloning it locally and accessing through file access. 
+
+Microsoft has implemented the repo with a wiki-like syntax that looks like this:
+
+```markdown
+As an example, consider the following active pattern with an argument.
+
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet5001.fs)]
+
+You can use the active pattern in a pattern matching expression, as in the following example.
+
+[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet5002.fs)]
+```
+
+So I had to decide weather to implement a sort of custom-web-local-hybrid scrape including wiki-lookups for code-snippets. It's a judgement call. I figured I would get more mileage from developing code and my skills in the direction of Canopy-enabled AJAX-capable HTTP web scraping. This also prevents users of this repo from having to clone the entire MS documentation repo in order to get what they want.
+
 #!fsharp
 
 #r "nuget: FSharp.Data, 4.0.1"
@@ -18,6 +46,10 @@ You might need to to upgrade Chrome by opening Chrome and going to Settings > Ab
 
 [Google Chrome Web Browser](https://www.google.com/chrome/thank-you.html?statcb=1&installdataindex=empty&defaultbrowser=0)
 
+## Load Constants and Open Browser Window
+
+The rest of the code runs a lot quicker after the browswer is open, so it's nice to open it and then troubleshoot parsing.
+
 #!fsharp
 
 let LanguageRefUrl = "https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/"
@@ -35,8 +67,8 @@ canopy.configuration.chromeDir <- chromedriverDir
 let browser = start chrome
 url LanguageRefUrl
 // let content = read linksElements
-let title = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0]
-title |> printf "Title: %A" 
+let pageTitle = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0].Replace("- ", "").Replace(" ", "_")
+pageTitle |> printf "Title: %A" 
 
 #!fsharp
 
@@ -45,12 +77,6 @@ let hasAnchor element =
     | Some(_) -> true
     | None -> false
 
-// let hasExpand (element: Selenium.IWebElement) =
-//     let classes = element.GetAttribute("class")
-//     match classes with
-//     | Some(_) -> true
-//     | None -> false
-
 let followLink element = 
     element
 
@@ -58,20 +84,54 @@ let followLink element =
 let toc = element "#title-7-1 > ul" 
 let tocItems = toc |> elementsWithin "li"
 let folderItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") > -1) 
+
+// Open folders
+folderItems |> List.filter (fun folderItem -> folderItem.GetAttribute("class").Contains("is-expanded") = false) |> List.iter (fun item -> item |> elementWithin "span" |> click) 
+
 let pageItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") = -1)
-// let pageLinks = List.map (fun item -> item |)
-folderItems |> List.iter (fun item -> item |> elementWithin "span" |> click) 
 let pageLinks = pageItems |> List.map (fun item -> (item |> elementWithin "a").GetAttribute("href"))
+// printf "%A" pageLinks 
 
 #!fsharp
 
-url pageLinks.[8]
-let mainContent = elements "main#main.content code.lang-fsharp"
-printf "%s" (mainContent.[3].GetProperty("innerText"))
-// mainContent |> List.iter (fun pre -> pre.GetProperty("innterHTML") |> printf "%s")
-// mainContent.GetProperty("children") 
-//     |> List.filter (fun child -> child.GetProperty("innerHTML").indexOf("<pre>") > -1) 
-//     |> List.iter (fun pre -> printf ("%A" (pre.GetProperty("innerText")))) 
+#r "nuget: Html2Markdown, 4.0.0.427"
+open Html2Markdown
+
+let converter = new Converter()
+
+let readContents (pageLink:string) : List<IWebElement> =
+    url pageLink
+    waitForElement "h2#feedback"
+    element "main#main.content" |> elementsWithin "div,h1,h2,pre"
+
+let writeContentsToFile (pageLink:string) = 
+    let mainContent = readContents pageLink
+    // mainContent |> List.iter (fun content -> printf "%s" (content.GetProperty("innerHTML"))
+    let snippetSelector = "code.lang-fsharp"
+    let folder = pageLink.[pageLink.IndexOf("/language-reference/") + 20..pageLink.LastIndexOf("/")]
+    printf "Folder: %s" folder
+    let folderPath = __SOURCE_DIRECTORY__ + "/" + if String.length folder > 0 then folder.Replace(" ", "_") + "/" else ""
+    if not (Directory.Exists folderPath) then
+        Directory.CreateDirectory folderPath |> ignore
+        printfn "CREATING DIR: %O" folderPath
+
+
+    // let document = mainContent |> List.collect (fun element -> 
+    //     element.GetAttribute("innerHTML") + ";"
+    // )
+    printf "mainContent: %A" mainContent
+    let htmlDoc = mainContent |> List.fold(fun item, acc -> item.GetProperty("innerHTML"))
+    printf "%O" htmlDoc
+    // let dibDocument = converter.Convert(htmlDoc.[5])
+    // printfn "PRINTING TITLE: %s" pageTitle
+    // // let dibDocument = $"#!markdown\n\n[{title}]({githubRootUrl + link})\n" + document.Replace("""```fsharp""", """#!fsharp\n""").Replace("""```""","""#!markdown\n""")
+    // let outfile = folderPath + pageLink.[pageLink.LastIndexOf("/") + 1..] + ".dib"
+    // printfn "Writing file: %s\n%s" (outfile) (dibDocument)
+    // File.WriteAllText(outfile, dibDocument)
+
+pageLinks.[7..8] |> List.iter (fun pageLink ->
+    writeContentsToFile pageLink
+)
 
 #!fsharp
 

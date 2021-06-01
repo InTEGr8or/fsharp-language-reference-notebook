@@ -8,6 +8,8 @@ author: Mark Stouffer
 
 An executable REPL of the [F# Language Reference](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference)
 
+NOTE: Code harvesting process is contained in the [[scrape_docs.dib]] Notebook, which is easy to run in the REPL.
+
 As I taught myself FSharp yesterday, I studied the Microsoft Docs F# Language Reference, copying the code snippets into my `dotnet fsi` REPL, which was very helpful for understanding.
 
 Then I realized I could collect the code snippets in a `.fsx` file and run it right there for future reference as I stumble through a code project.
