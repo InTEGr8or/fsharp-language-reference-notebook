@@ -1,0 +1,16 @@
+#!markdown
+
+[SOURCE: Language_Reference_F#](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/compiler-messages/)
+
+# F# compiler messages
+
+This section details compiler errors and warnings that the F# compiler will emit for certain constructs. The default sets of errors can be changed by:
+
+Treating specific warnings as if they were errors by using the `-warnaserror+` compiler option,
+
+Ignoring specific warnings by using the `-nowarn` compiler option
+
+If a particular warning or error is not yet recorded in this section:
+
+## See also
+

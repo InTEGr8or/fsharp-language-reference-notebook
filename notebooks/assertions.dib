@@ -1,0 +1,51 @@
+#!markdown
+
+[SOURCE: Language_Reference_F#](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/assertions)
+
+# Assertions
+
+ +2 
+
+The `assert` expression is a debugging feature that you can use to test an expression. Upon failure in Debug mode, an assertion generates a system error dialog box.
+
+## Syntax
+
+
+
+#!fsharp
+
+assert condition
+
+#!markdown
+
+## Remarks
+
+The `assert` expression has type `bool -> unit`.
+
+The `assert` function resolves to [Debug.Assert](/en-us/dotnet/api/system.diagnostics.debug.assert). This means its behavior is identical to having called [Debug.Assert](/en-us/dotnet/api/system.diagnostics.debug.assert) directly.
+
+Assertion checking is enabled only when you compile in Debug mode; that is, if the constant `DEBUG` is defined. In the project system, by default, the `DEBUG` constant is defined in the Debug configuration but not in the Release configuration.
+
+The assertion failure error cannot be caught by using F# exception handling.
+
+## Example
+
+The following code example illustrates the use of the `assert` expression.
+
+
+
+#!fsharp
+
+let subtractUnsigned (x : uint32) (y : uint32) =
+    assert (x > y)
+    let z = x - y
+    z
+// This code does not generate an assertion failure.
+let result1 = subtractUnsigned 2u 1u
+// This code generates an assertion failure.
+let result2 = subtractUnsigned 1u 2u
+
+#!markdown
+
+## See also
+

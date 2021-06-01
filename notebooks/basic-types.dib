@@ -1,0 +1,42 @@
+#!markdown
+
+[SOURCE: Language_Reference_F#](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/basic-types)
+
+# Basic types
+
+ +1 
+
+This topic lists the basic types that are defined in the F# language. These types are the most fundamental in F#, forming the basis of nearly every F# program. They are a superset of .NET primitive types.
+
+<caption class="visually-hidden">Basic types</caption>
+
+| Type | .NET type | Description | Example |
+| --- | --- | --- | --- |
+| `bool` | [Boolean](/en-us/dotnet/api/system.boolean) | Possible values are `true` and `false`. | `true`/`false` |
+| `byte` | [Byte](/en-us/dotnet/api/system.byte) | Values from 0 to 255. | `1uy` |
+| `sbyte` | [SByte](/en-us/dotnet/api/system.sbyte) | Values from -128 to 127. | `1y` |
+| `int16` | [Int16](/en-us/dotnet/api/system.int16) | Values from -32768 to 32767. | `1s` |
+| `uint16` | [UInt16](/en-us/dotnet/api/system.uint16) | Values from 0 to 65535. | `1us` |
+| `int` | [Int32](/en-us/dotnet/api/system.int32) | Values from -2,147,483,648 to 2,147,483,647. | `1` |
+| `uint` | [UInt32](/en-us/dotnet/api/system.uint32) | Values from 0 to 4,294,967,295. | `1u` |
+| `int64` | [Int64](/en-us/dotnet/api/system.int64) | Values from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807. | `1L` |
+| `uint64` | [UInt64](/en-us/dotnet/api/system.uint64) | Values from 0 to 18,446,744,073,709,551,615. | `1UL` |
+| `nativeint` | [IntPtr](/en-us/dotnet/api/system.intptr) | A native pointer as a signed integer. | `nativeint 1` |
+| `unativeint` | [UIntPtr](/en-us/dotnet/api/system.uintptr) | A native pointer as an unsigned integer. | `unativeint 1` |
+| `decimal` | [Decimal](/en-us/dotnet/api/system.decimal) | A floating point data type that has at least 28 significant digits. | `1.0` |
+| `float`, `double` | [Double](/en-us/dotnet/api/system.double) | A 64-bit floating point type. | `1.0` |
+| `float32`, `single` | [Single](/en-us/dotnet/api/system.single) | A 32-bit floating point type. | `1.0f` |
+| `char` | [Char](/en-us/dotnet/api/system.char) | Unicode character values. | `'c'` |
+| `string` | [String](/en-us/dotnet/api/system.string) | Unicode text. | `"str"` |
+| `unit` | not applicable | Indicates the absence of an actual value. The type has only one formal value, which is denoted `()`. The unit value, `()`, is often used as a placeholder where a value is needed but no real value is available or makes sense. | `()` |
+
+Note
+
+You can perform computations with integers too big for the 64-bit integer type by using the `bigint` type. `bigint` is not considered a basic type; it is an abbreviation for `System.Numerics.BigInteger`.
+
+Note
+
+You can perform computations with integers too big for the 64-bit integer type by using the `bigint` type. `bigint` is not considered a basic type; it is an abbreviation for `System.Numerics.BigInteger`.
+
+## See also
+

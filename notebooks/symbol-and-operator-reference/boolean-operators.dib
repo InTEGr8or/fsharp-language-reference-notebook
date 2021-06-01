@@ -1,0 +1,24 @@
+#!markdown
+
+[SOURCE: Language_Reference_F#](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/symbol-and-operator-reference/boolean-operators)
+
+# Boolean Operators
+
+This topic describes the support for Boolean operators in the F# language.
+
+## Summary of Boolean Operators
+
+The following table summarizes the Boolean operators that are available in the F# language. The only type supported by these operators is the `bool` type.
+
+<caption class="visually-hidden">Summary of Boolean Operators</caption>
+
+| Operator | Description |
+| --- | --- |
+| `not` | Boolean negation |
+| `||` | Boolean OR |
+| `&&` | Boolean AND |
+
+The Boolean AND and OR operators perform *short-circuit evaluation*, that is, they evaluate the expression on the right of the operator only when it is necessary to determine the overall result of the expression. The second expression of the `&&` operator is evaluated only if the first expression evaluates to `true`; the second expression of the `||` operator is evaluated only if the first expression evaluates to `false`.
+
+## See also
+

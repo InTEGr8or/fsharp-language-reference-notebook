@@ -66,6 +66,12 @@ url LanguageRefUrl
 let pageTitle = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0].Replace("- ", "").Replace(" ", "_")
 // pageTitle |> printf "Title: %A" 
 
+#!markdown
+
+## Accumilate Links
+
+Open the browser to the root URL and parse the TOC for links, expanding folders to get nested content.
+
 #!fsharp
 
 let hasAnchor element =
@@ -76,7 +82,6 @@ let hasAnchor element =
 let followLink element = 
     element
 
-
 let toc = element "#title-7-1 > ul" 
 let tocItems = toc |> elementsWithin "li"
 let folderItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") > -1) 
@@ -84,13 +89,16 @@ let folderItems = tocItems |> List.filter (fun item -> item.GetAttribute("class"
 // Open folders
 folderItems |> List.filter (fun folderItem -> folderItem.GetAttribute("class").Contains("is-expanded") = false) |> List.iter (fun item -> item |> elementWithin "span" |> click) 
 
-let pageItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") = -1)
+let pageItems = toc |> elementsWithin "li" |> List.filter (fun item -> item.GetAttribute("class").Contains("tree-item") = false)
+// printf "%A" (pageItems |> List.map(fun item -> item.GetAttribute("class")))
 let pageLinks = pageItems |> List.map (fun item -> (item |> elementWithin "a").GetAttribute("href"))
+// printf "%A" pageLinks
 
 #!fsharp
 
 #r "nuget: ReverseMarkdown, 3.19.0"
 open ReverseMarkdown
+open OpenQA.Selenium
 
 let converter = new Converter()
 
@@ -105,78 +113,33 @@ let stripString (pattern:string) (replace:string) (content:string): string =
     // printf "RESULT: %s" result.[(String.length result)..]
     result
 
-let htmlElementsToDib (elements:List<IWebElement>) : string =
+let htmlElementsToDib (elements:List<IWebElement>) (pageLink:string) : string =
     // elements |> List.iter (fun item -> Regex.Replace(item.GetProperty("outerHTML").Trim(), @"[\t\s]{2,500}", " ").[0..150] |> printf "Elements: %s")
     let markdownList:List<string> = elements |> List.map (fun element ->
         match element.GetAttribute("class").Contains("has-inner-focus") with
         | true -> "\n#!fsharp\n\n" + element.GetProperty("innerText") + "\n#!markdown\n\n"
         | false -> "\n\n" + converter.Convert(element.GetProperty("outerHTML")).Replace("</caption>","</caption>\n\n") + "\n\n"
     )
-    let markdown = "#!markdown\n\n" + System.String.Join("\n", markdownList)
+    let markdown = $"#!markdown\n\n[SOURCE: {pageTitle}]({pageLink})" + System.String.Join("\n", markdownList)
     // printf "%O" markdown
-    markdown |> stripString @"[\t]{5,100}" " " |> stripString @"[\n\r]{3,500}" "\n\n" |> stripString """(F#|Console)<button[.\s\n\w\"=\-\<\>\/]*\<\/button\>""" ""
+    markdown |> stripString @"[\t]{5,100}" " " |> stripString @"[\n\r]{3,500}" "\n\n" |> stripString """(F#|C\+\+|Console)<button[.\s\n\w\"=\-\<\>\/]*\<\/button\>""" ""
 
 let writeContentsToFile (pageLink:string) =
     let mainContent:List<IWebElement> = readContents pageLink
     let snippetSelector = "code.lang-fsharp"
     let folder = pageLink.[pageLink.IndexOf("/language-reference/")+20..pageLink.LastIndexOf("/")]
-    let folderPath = __SOURCE_DIRECTORY__ + "/" + if String.length folder > 0 then folder.Replace(" ", "_") + "/" else ""
+    let folderPath = __SOURCE_DIRECTORY__ + "/notebooks/" + if String.length folder > 0 then folder.Replace(" ", "_") + "/" else ""
     if not (Directory.Exists folderPath) then
         Directory.CreateDirectory folderPath |> ignore
-        printfn "CREATING DIR: %O" folderPath
+        printf "CREATING DIR: %O" folderPath
 
-    let dibDocument = htmlElementsToDib mainContent
+    let dibDocument = htmlElementsToDib mainContent pageLink
     // printf "dibDocument: %A" dibDocument
     let titleFromUrl = pageLink.[pageLink.LastIndexOf("/") + 1..]
-    let outfile = folderPath + if (String.length titleFromUrl) > 0 then titleFromUrl else "_index"  + ".dib"
-    printfn "Writing file: %s" (outfile)
+    let outfile = folderPath + (if (String.length titleFromUrl) > 0 then titleFromUrl else "_index")  + ".dib"
+    // printfn "Writing file: %s %s" (pageLink) (outfile)
     File.WriteAllText(outfile, dibDocument)
 
 pageLinks |> List.iter (fun pageLink ->
     writeContentsToFile pageLink
 )
-
-#!fsharp
-
-tocItems |> List.iter (fun element -> ( 
-    if element.GetAttribute("class") = "tree-item" then (
-        element |> elementWithin "span" |> click 
-    ) else element |> elementsWithin("a") |> printf "%A" 
-))
-
-#!fsharp
-
-Collections.ObjectModel.ReadOnlyCollection<OpenQA.Selenium.IWebElement>
-
-let topics = HtmlDocument.Load(LanguageRefUrl).CssSelect(listSelector)
-
-let links = topics |> List.map(fun a -> (a.AttributeValue("href")))
-
-let rec ReadDocs links folder =
-    for (link:string) in links do
-        if link.Contains(".md") || link.Contains(".png") then
-            let folderString = if String.length folder > 0 then folder + "/" else ""
-            let folderPath = __SOURCE_DIRECTORY__ + folderString
-            if not (Directory.Exists folderPath) then
-                Directory.CreateDirectory folderPath |> ignore
-                printfn "CREATING DIR: %O" folderPath
-                    
-            let document = Http.RequestString(RawFileRootUrl + link.Replace("blob/", ""))
-            let titleStart = document.[document.IndexOf("title: ") + 7..200]
-            let title = titleStart.[..titleStart.IndexOf("\n")]
-            printfn "PRINTING TITLE: %s" title
-            let dibDocument = $"#!markdown\n\n[{title}]({githubRootUrl + link})\n" + document.Replace("""```fsharp""", """#!fsharp\n""").Replace("""```""","""#!markdown\n""")
-            let outfile = folderPath + link.[link.LastIndexOf("/") + 1..].Replace(".md", ".dib") 
-            printfn "Writing file: %s\n\n%s\n\n" outfile dibDocument
-            File.WriteAllText(outfile, dibDocument)
-                
-        else
-            let folder = link.[link.LastIndexOf("/")..]
-            let folderUrl = "https://github.com" + link
-            printfn "Folder: %s " folderUrl
-            let topics = HtmlDocument.Load(folderUrl).CssSelect(listSelector)
-            let links = topics |> List.map(fun a -> (a.AttributeValue("href")))
-            ReadDocs links.[0..2] folder
-            // printfn "Error fetching: %s" link
-
-ReadDocs links.[0..2] ""
