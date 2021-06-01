@@ -1,23 +1,23 @@
 #!markdown
 
----
-title: Copy and Update Record Expressions
-description: Learn how to write a 'copy and update expression' that copies an existing record or anonymous record, updates specified fields, and returns the updated record or anonymous record.
-author: ChrSteinert
-ms.date: 06/12/2019
----
 # Copy and Update Record Expressions
+
+ +3 
 
 A *copy and update record expression* is an expression that copies an existing record, updates specified fields, and returns the updated record.
 
 ## Syntax
 
+
+
 #!fsharp
+
 { record-name with
     updated-labels }
 
 {| anonymous-record-name with
     updated-labels |}
+
 #!markdown
 
 ## Remarks
@@ -28,14 +28,23 @@ This can be useful when you have to copy an existing record, and possibly change
 
 Take for instance a newly created record.
 
-[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet1905.fs)]
+
+
+#!fsharp
+
+let myRecord2 = { MyRecord.X = 1; MyRecord.Y = 2; MyRecord.Z = 3 }
+
+#!markdown
 
 To update only two fields in that record you can use the *copy and update record expression*:
 
-[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-1/snippet1906.fs)]
+
+
+#!fsharp
+
+let myRecord3 = { myRecord2 with Y = 100; Z = 2 }
+
+#!markdown
 
 ## See also
 
-- [Records](records.md)
-- [Anonymous Records](anonymous-records.md)
-- [F# Language Reference](index.md)

@@ -31,12 +31,11 @@ So I had to decide weather to implement a sort of custom-web-local-hybrid scrape
 #r "nuget: FSharp.Data, 4.0.1"
 open FSharp.Data
 #r "nuget: canopy, 2.1.5"
-open canopy.runner
+open canopy.runner.classic
 open canopy.configuration
-open canopy
-#r "nuget: Selenium.WebDriver, 3.141.0"
+open canopy.classic
 #r "nuget: Selenium.WebDriver.ChromeDriver, 91.0.4472.1900"
-open OpenQA.Selenium
+open System
 open System.IO
 open System.Text.RegularExpressions
 
@@ -53,9 +52,6 @@ The rest of the code runs a lot quicker after the browswer is open, so it's nice
 #!fsharp
 
 let LanguageRefUrl = "https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/"
-let LanguageRefDocsUrl = "https://github.com/dotnet/docs/tree/main/docs/fsharp/language-reference"
-let githubRootUrl = "https://github.com/"
-let RawFileRootUrl = "https://raw.githubusercontent.com/"
 let linksElements = "div.js-details-container.Details div.py-2 a.Link--primary"
 let listSelector = "#title-7-1 > ul > li"
 let expandSelector = ".tree-item"
@@ -68,7 +64,7 @@ let browser = start chrome
 url LanguageRefUrl
 // let content = read linksElements
 let pageTitle = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0].Replace("- ", "").Replace(" ", "_")
-pageTitle |> printf "Title: %A" 
+// pageTitle |> printf "Title: %A" 
 
 #!fsharp
 
@@ -90,46 +86,53 @@ folderItems |> List.filter (fun folderItem -> folderItem.GetAttribute("class").C
 
 let pageItems = tocItems |> List.filter (fun item -> item.GetAttribute("class").IndexOf("tree-item") = -1)
 let pageLinks = pageItems |> List.map (fun item -> (item |> elementWithin "a").GetAttribute("href"))
-// printf "%A" pageLinks 
 
 #!fsharp
 
-#r "nuget: Html2Markdown, 4.0.0.427"
-open Html2Markdown
+#r "nuget: ReverseMarkdown, 3.19.0"
+open ReverseMarkdown
 
 let converter = new Converter()
 
 let readContents (pageLink:string) : List<IWebElement> =
     url pageLink
     waitForElement "h2#feedback"
-    element "main#main.content" |> elementsWithin "div,h1,h2,pre"
+    element "main#main.content" |> elementsWithin "div,h1,h2,pre,p"
 
-let writeContentsToFile (pageLink:string) = 
-    let mainContent = readContents pageLink
-    // mainContent |> List.iter (fun content -> printf "%s" (content.GetProperty("innerHTML"))
+let stripString (pattern:string) (replace:string) (content:string): string =
+    // printf "CONTENT: %s" content.[(String.length content)..]
+    let result = Regex.Replace(content, pattern, replace)
+    // printf "RESULT: %s" result.[(String.length result)..]
+    result
+
+let htmlElementsToDib (elements:List<IWebElement>) : string =
+    // elements |> List.iter (fun item -> Regex.Replace(item.GetProperty("outerHTML").Trim(), @"[\t\s]{2,500}", " ").[0..150] |> printf "Elements: %s")
+    let markdownList:List<string> = elements |> List.map (fun element ->
+        match element.GetAttribute("class").Contains("has-inner-focus") with
+        | true -> "\n#!fsharp\n\n" + element.GetProperty("innerText") + "\n#!markdown\n\n"
+        | false -> "\n\n" + converter.Convert(element.GetProperty("outerHTML")).Replace("</caption>","</caption>\n\n") + "\n\n"
+    )
+    let markdown = "#!markdown\n\n" + System.String.Join("\n", markdownList)
+    // printf "%O" markdown
+    markdown |> stripString @"[\t]{5,100}" " " |> stripString @"[\n\r]{3,500}" "\n\n" |> stripString """(F#|Console)<button[.\s\n\w\"=\-\<\>\/]*\<\/button\>""" ""
+
+let writeContentsToFile (pageLink:string) =
+    let mainContent:List<IWebElement> = readContents pageLink
     let snippetSelector = "code.lang-fsharp"
-    let folder = pageLink.[pageLink.IndexOf("/language-reference/") + 20..pageLink.LastIndexOf("/")]
-    printf "Folder: %s" folder
+    let folder = pageLink.[pageLink.IndexOf("/language-reference/")+20..pageLink.LastIndexOf("/")]
     let folderPath = __SOURCE_DIRECTORY__ + "/" + if String.length folder > 0 then folder.Replace(" ", "_") + "/" else ""
     if not (Directory.Exists folderPath) then
         Directory.CreateDirectory folderPath |> ignore
         printfn "CREATING DIR: %O" folderPath
 
+    let dibDocument = htmlElementsToDib mainContent
+    // printf "dibDocument: %A" dibDocument
+    let titleFromUrl = pageLink.[pageLink.LastIndexOf("/") + 1..]
+    let outfile = folderPath + if (String.length titleFromUrl) > 0 then titleFromUrl else "_index"  + ".dib"
+    printfn "Writing file: %s" (outfile)
+    File.WriteAllText(outfile, dibDocument)
 
-    // let document = mainContent |> List.collect (fun element -> 
-    //     element.GetAttribute("innerHTML") + ";"
-    // )
-    printf "mainContent: %A" mainContent
-    let htmlDoc = mainContent |> List.fold(fun item, acc -> item.GetProperty("innerHTML"))
-    printf "%O" htmlDoc
-    // let dibDocument = converter.Convert(htmlDoc.[5])
-    // printfn "PRINTING TITLE: %s" pageTitle
-    // // let dibDocument = $"#!markdown\n\n[{title}]({githubRootUrl + link})\n" + document.Replace("""```fsharp""", """#!fsharp\n""").Replace("""```""","""#!markdown\n""")
-    // let outfile = folderPath + pageLink.[pageLink.LastIndexOf("/") + 1..] + ".dib"
-    // printfn "Writing file: %s\n%s" (outfile) (dibDocument)
-    // File.WriteAllText(outfile, dibDocument)
-
-pageLinks.[7..8] |> List.iter (fun pageLink ->
+pageLinks |> List.iter (fun pageLink ->
     writeContentsToFile pageLink
 )
 

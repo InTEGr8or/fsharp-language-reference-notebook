@@ -1,11 +1,8 @@
 #!markdown
 
----
-title: Interactive options
-description: Learn about the command-line options supported by F# Interactive, fsi.exe.
-ms.date: 08/15/2020
----
 # F# Interactive options
+
+ +3 
 
 This article describes the command-line options supported by F# Interactive, `fsi.exe`. F# Interactive accepts many of the same command-line options as the F# compiler, but also accepts some additional options.
 
@@ -13,8 +10,12 @@ This article describes the command-line options supported by F# Interactive, `fs
 
 F# Interactive, `dotnet fsi`, can be launched interactively, or it can be launched from the command line to run a script. The command-line syntax is
 
-#!markdowndotnetcli
+.NET CLI<button type="button" class="action position-relative" data-bi-name="copy" aria-label="Copy code">			<span class="icon">				<span class="docon docon-edit-copy" role="presentation"></span>			</span>			<span>Copy</span>			<div class="successful-copy-alert position-absolute right-0 top-0 left-0 bottom-0 display-flex align-items-center justify-content-center has-text-success-invert has-background-success is-transparent" aria-hidden="true">				<span class="icon font-size-l"> <span class="docon docon-check-mark" role="presentation"></span>				</span>			</div>		</button>
+
+#!fsharp
+
 dotnet fsi [options] [ script-file [arguments] ]
+
 #!markdown
 
 The file extension for F# script files is `.fsx`.
@@ -25,56 +26,60 @@ The following table summarizes the options supported by F# Interactive. You can 
 
 Where lists appear in F# Interactive option arguments, list elements are separated by semicolons (`;`).
 
-|Option|Description|
-|------|-----------|
-|**--**|Used to instruct F# Interactive to treat remaining arguments as command-line arguments to the F# program or script, which you can access in code by using the list **fsi.CommandLineArgs**.|
-|**--checked**[**+**&#124;**-**]|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--codepage:&lt;int&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--consolecolors**[**+**&#124;**-**]|Outputs warning and error messages in color.|
-|**--crossoptimize**[**+**&#124;**-**]|Enable or disable cross-module optimizations.|
-|**--debug**[**+**&#124;**-**]<br /><br />**--debug:**[**full**&#124;**pdbonly**&#124;**portable**&#124;**embedded**]<br /><br />**-g**[**+**&#124;**-**]<br /><br />**-g:**[**full**&#124;**pdbonly**&#124;**portable**&#124;**embedded**]|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--define:&lt;string&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--deterministic**[**+**&#124;**-**]|Produces a deterministic assembly (including module version GUID and timestamp).|
-|**--exec**|Instructs F# interactive to exit after loading the files or running the script file given on the command line.|
-|**--fullpaths**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--gui**[**+**&#124;**-**]|Enables or disables the Windows Forms event loop. The default is enabled.|
-|**--help**<br /><br />**-?**|Used to display the command-line syntax and a brief description of each option.|
-|**--lib:&lt;folder-list&gt;**<br /><br />**-I:&lt;folder-list&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--load:&lt;filename&gt;**|Compiles the given source code at startup and loads the compiled F# constructs into the session.|
-|**--mlcompatibility**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--noframework**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md)|
-|**--nologo**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--nowarn:&lt;warning-list&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--optimize**[**+**&#124;**-**]|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--preferreduilang:&lt;lang&gt;**| Specifies the preferred output language culture name (for example, es-ES, ja-JP). |
-|**--quiet**|Suppress F# Interactive's output to the **stdout** stream.|
-|**--quotations-debug**|Specifies that extra debugging information should be emitted for expressions that are derived from F# quotation literals and reflected definitions. The debug information is added to the custom attributes of an F# expression tree node. See [Code Quotations](code-quotations.md) and [Expr.CustomAttributes](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-quotations-fsharpexpr.html#CustomAttributes).|
-|**--readline**[**+**&#124;**-**]|Enable or disable tab completion in interactive mode.|
-|**--reference:&lt;filename&gt;**<br /><br />**-r:&lt;filename&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--tailcalls**[**+**&#124;**-**]|Enable or disable the use of the tail IL instruction, which causes the stack frame to be reused for tail recursive functions. This option is enabled by default.|
-|**--targetprofile:&lt;string&gt;**|Specifies target framework profile of this assembly. Valid values are `mscorlib`, `netcore`, or `netstandard`. The default is `mscorlib`.|
-|**--use:&lt;filename&gt;**|Tells the interpreter to use the given file on startup as initial input.|
-|**--utf8output**|Same as the fsc.exe compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--warn:&lt;warning-level&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--warnaserror**[**+**&#124;**-**]|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
-|**--warnaserror**[**+**&#124;**-**]:**&lt;int-list&gt;**|Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options.md).|
+<caption class="visually-hidden">Table of F# Interactive Options</caption>
+
+| Option | Description |
+| --- | --- |
+| **--** | Used to instruct F# Interactive to treat remaining arguments as command-line arguments to the F# program or script, which you can access in code by using the list **fsi.CommandLineArgs**. |
+| **--checked**[**+**|**-**] | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--codepage:&lt;int&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--consolecolors**[**+**|**-**] | Outputs warning and error messages in color. |
+| **--crossoptimize**[**+**|**-**] | Enable or disable cross-module optimizations. |
+| **--debug**[**+**|**-**]  <br>  <br>**--debug:**[**full**|**pdbonly**|**portable**|**embedded**]  <br>  <br>**-g**[**+**|**-**]  <br>  <br>**-g:**[**full**|**pdbonly**|**portable**|**embedded**] | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--define:&lt;string&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--deterministic**[**+**|**-**] | Produces a deterministic assembly (including module version GUID and timestamp). |
+| **--exec** | Instructs F# interactive to exit after loading the files or running the script file given on the command line. |
+| **--fullpaths** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--gui**[**+**|**-**] | Enables or disables the Windows Forms event loop. The default is enabled. |
+| **--help**  <br>  <br>**-?** | Used to display the command-line syntax and a brief description of each option. |
+| **--lib:&lt;folder-list&gt;**  <br>  <br>**-I:&lt;folder-list&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--load:&lt;filename&gt;** | Compiles the given source code at startup and loads the compiled F# constructs into the session. |
+| **--mlcompatibility** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--noframework** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options) |
+| **--nologo** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--nowarn:&lt;warning-list&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--optimize**[**+**|**-**] | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--preferreduilang:&lt;lang&gt;** | Specifies the preferred output language culture name (for example, es-ES, ja-JP). |
+| **--quiet** | Suppress F# Interactive's output to the **stdout** stream. |
+| **--quotations-debug** | Specifies that extra debugging information should be emitted for expressions that are derived from F# quotation literals and reflected definitions. The debug information is added to the custom attributes of an F# expression tree node. See [Code Quotations](code-quotations) and [Expr.CustomAttributes](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-quotations-fsharpexpr.html#CustomAttributes). |
+| **--readline**[**+**|**-**] | Enable or disable tab completion in interactive mode. |
+| **--reference:&lt;filename&gt;**  <br>  <br>**-r:&lt;filename&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--tailcalls**[**+**|**-**] | Enable or disable the use of the tail IL instruction, which causes the stack frame to be reused for tail recursive functions. This option is enabled by default. |
+| **--targetprofile:&lt;string&gt;** | Specifies target framework profile of this assembly. Valid values are `mscorlib`, `netcore`, or `netstandard`. The default is `mscorlib`. |
+| **--use:&lt;filename&gt;** | Tells the interpreter to use the given file on startup as initial input. |
+| **--utf8output** | Same as the fsc.exe compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--warn:&lt;warning-level&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--warnaserror**[**+**|**-**] | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
+| **--warnaserror**[**+**|**-**]:**&lt;int-list&gt;** | Same as the **fsc.exe** compiler option. For more information, see [Compiler Options](compiler-options). |
 
 ## F# Interactive structured printing
 
-F# Interactive (`dotnet fsi`) uses an extended version of [structured plain text formatting](plaintext-formatting.md) to
-report values.
+F# Interactive (`dotnet fsi`) uses an extended version of [structured plain text formatting](plaintext-formatting) to report values.
 
-1. All features of `%A` plain text formatting are supported, and some are additionally customizable.
+All features of `%A` plain text formatting are supported, and some are additionally customizable.
 
-2. Printing is colorized if colors are supported by the output console.
+Printing is colorized if colors are supported by the output console.
 
-3. A limit is placed on the length of strings shown, unless you explicitly evaluate that string.
+A limit is placed on the length of strings shown, unless you explicitly evaluate that string.
 
-4. A set of user-definable settings is available via the `fsi` object.
+A set of user-definable settings is available via the `fsi` object.
 
 The available settings to customize plain text printing for reported values are:
 
+
+
 #!fsharp
+
 open System.Globalization
 
 fsi.FormatProvider <- CultureInfo("de-DE")  // control the default culture for primitives
@@ -92,15 +97,15 @@ fsi.ShowProperties <- false  // Control whether properties of .NET objects are s
 fsi.ShowIEnumerable <- false // Control whether sequence values are expanded by default
 
 fsi.ShowDeclarationValues <- false // Control whether values are shown for declaration outputs
+
 #!markdown
 
-### Customize with `AddPrinter` and `AddPrintTransformer`
+Printing in F# Interactive outputs can be customized by using `fsi.AddPrinter` and `fsi.AddPrintTransformer`. The first function gives text to replace the printing of an object. The second function returns a surrogate object to display instead. For example, consider the following F# code:
 
-Printing in F# Interactive outputs can be customized by using `fsi.AddPrinter` and `fsi.AddPrintTransformer`.
-The first function gives text to replace the printing of an object. The second function returns a surrogate object to display
-instead. For example, consider the following F# code:
+
 
 #!fsharp
+
 open System
 
 fsi.AddPrinter<DateTime>(fun dt -> dt.ToString("s"))
@@ -112,55 +117,78 @@ type DateAndLabel =
 let newYearsDay1999 =
     { Date = DateTime(1999, 1, 1)
       Label = "New Year" }
+
 #!markdown
 
 If you execute the example in F# Interactive, it outputs based on the formatting option set. In this case, it affects the formatting of date and time:
 
-#!share
+
+
+#!fsharp
+
 type DateAndLabel =
   { Date: DateTime
     Label: string }
 val newYearsDay1999 : DateAndLabel = { Date = 1999-01-01T00:00:00
                                        Label = "New Year" }
+
 #!markdown
 
 `fsi.AddPrintTransformer` can be used to give a surrogate object for printing:
 
+
+
 #!fsharp
+
 type MyList(values: int list) =
     member _.Values = values
 
 fsi.AddPrintTransformer(fun (x:MyList) -> box x.Values)
 
 let x = MyList([1..10])
+
 #!markdown
 
 This outputs:
 
-#!share
-val x : MyList = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
-#!markdown
 
-If the transformer function passed to `fsi.AddPrintTransformer` returns `null`, then the print transformer is ignored.
-This can be used to filter any input value by starting with type `obj`.  For example:
 
 #!fsharp
+
+val x : MyList = [1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
+
+#!markdown
+
+If the transformer function passed to `fsi.AddPrintTransformer` returns `null`, then the print transformer is ignored. This can be used to filter any input value by starting with type `obj`.  For example:
+
+
+
+#!fsharp
+
 fsi.AddPrintTransformer(fun (x:obj) ->
     match x with
     | :? string as s when s = "beep" -> box ["quack"; "quack"; "quack"]
     | _ -> null)
 
 let y = "beep"
+
 #!markdown
 
 This outputs:
 
-#!share
+
+
+#!fsharp
+
 val y : string = ["quack"; "quack"; "quack"]
+
 #!markdown
 
 ## Related topics
 
-|Title|Description|
-|-----|-----------|
-|[Compiler Options](compiler-options.md)|Describes command-line options available for the F# compiler, **fsc.exe**.|
+<caption class="visually-hidden">Related topics</caption>
+
+| Title | Description |
+| --- | --- |
+| [Compiler Options](compiler-options) | Describes command-line options available for the F# compiler, **fsc.exe**. |
+

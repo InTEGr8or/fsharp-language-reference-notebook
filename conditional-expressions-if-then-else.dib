@@ -1,18 +1,19 @@
 #!markdown
 
----
-title: "Conditional Expressions: if... then...else"
-description: Learn how to write conditional expressions in F# to execute different branches of code.
-ms.date: 05/16/2016
----
 # Conditional Expressions: `if...then...else`
+
+ +3 
 
 The `if...then...else` expression runs different branches of code and also evaluates to a different value depending on the Boolean expression given.
 
 ## Syntax
 
+
+
 #!fsharp
+
 if boolean-expression then expression1 [ else expression2 ]
+
 #!markdown
 
 ## Remarks
@@ -25,15 +26,39 @@ Unlike in other languages, the `if...then...else` construct is an expression, no
 
 The following example illustrates how to use the `if...then...else` expression.
 
-[!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet4501.fs)]
 
-#!share
+
+#!fsharp
+
+let test x y =
+  if x = y then "equals"
+  elif x < y then "is less than"
+  else "is greater than"
+
+printfn "%d %s %d." 10 (test 10 20) 20
+
+printfn "What is your name? "
+let nameString = System.Console.ReadLine()
+
+printfn "What is your age? "
+let ageString = System.Console.ReadLine()
+let age = System.Int32.Parse(ageString)
+
+if age < 10
+then printfn "You are only %d years old and already learning F#? Wow!" age
+
+#!markdown
+
+
+
+#!fsharp
+
 10 is less than 20
 What is your name? John
 How old are you? 9
 You are only 9 years old and already learning F#? Wow!
+
 #!markdown
 
 ## See also
 
-- [F# Language Reference](index.md)
