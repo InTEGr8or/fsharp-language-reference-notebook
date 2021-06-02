@@ -8,6 +8,8 @@ author: Mark Stouffer
 
 An executable REPL of the [F# Language Reference](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference)
 
+Clone this repo locally and you'll be able to run and modify all the Language Reference code in Dotnet Notebook context. (You have to have the Dotnet Notebokk extension installed in VS Code)
+
 NOTE: Code harvesting process is contained in the [[scrape_docs.dib]] Notebook, which is easy to run in the REPL.
 
 As I taught myself FSharp yesterday, I studied the Microsoft Docs F# Language Reference, copying the code snippets into my `dotnet fsi` REPL, which was very helpful for understanding.
