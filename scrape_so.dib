@@ -1,0 +1,82 @@
+#!markdown
+
+# Scrape Stack Overflow
+
+By translating from the `scrape_docs.dib` to scrape StackOverflow question/answers instead of MS Docs I hope to get an idea how I can abstract the scraper code optimally.
+
+I'm glad I have the previously scraped reference material to browse and manipulate as I undertake this endeavor.
+
+#!markdown
+
+## JS Scraper Script
+
+I wrote this to scrape a few pages while I was doing the docs scraper, and I think I can get some page/schema info out of it.
+
+#!javascript
+
+let questionElement = document.querySelectorAll("#mainbar div#question div.post-layout div.votecell,div.postcell");
+let questionHtml = questionElement[1].innerHTML;
+var question = turndownService.turndown(questionHtml);
+let answersHeaderText = document.querySelector("div#answers-header").innerText;
+let answersElements = document.querySelector("#mainbar div#answers div.answer");
+let answersHtml = answersElements.innerHTML;
+let answers = turndownService.turndown(answersHtml);
+
+let codeSnippets = question.match(/\n\s{4,20}.*/g);
+
+let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(question + "\n\n" + answers);
+let topicName = document.getElementsByTagName("h1")[0].innerText;
+let exportFileDefaultName = `${topicName.replaceAll(" ", "_")}.md`;
+
+let linkElement = document.createElement('a');
+linkElement.setAttribute('href', dataUri);
+linkElement.setAttribute('download', exportFileDefaultName);
+linkElement.click();
+console.dir(question);
+
+#!markdown
+
+I am surprised that I can also include and run *Javascript*, *SQL*, and *HTML* in here. These notebooks are very flexible.
+
+That should make it simpler to transpose into *F#*
+
+#!fsharp
+
+#r "nuget: FSharp.Data, 4.0.1"
+open FSharp.Data
+#r "nuget: canopy, 2.1.5"
+open canopy.runner.classic
+open canopy.configuration
+open canopy.classic
+#r "nuget: Selenium.WebDriver.ChromeDriver, 91.0.4472.1900"
+open System
+open System.IO
+open System.Text.RegularExpressions
+#r "nuget: ReverseMarkdown, 3.19.0"
+open ReverseMarkdown
+open OpenQA.Selenium
+
+let converter = new Converter()
+
+let chromedriverDir = "C:/Users/xgenx/.nuget/packages/microsoft.dotnet-interactive/1.0.225602/tools/net5.0/any"
+canopy.configuration.chromeDir <- chromedriverDir
+//start an instance of chrome
+let browser = start chrome
+
+#!fsharp
+
+let stripString (pattern:string) (replace:string) (content:string): string =
+    // printf "CONTENT: %s" content.[(String.length content)..]
+    let result = Regex.Replace(content, pattern, replace).Trim()
+    // printf "RESULT: %s" result.[(String.length result)..]
+    result
+
+url "https://stackoverflow.com/questions/9055837/difference-between-fold-and-reduce"
+// let content = read linksElements
+let pageTitle = (fastTextFromCSS "title").[0].Split([|" | "|], StringSplitOptions.TrimEntries).[0].Replace("- ", "").Replace(" ", "_")
+// pageTitle |> printf "Title: %A" 
+let question = element "#mainbar div#question div.post-layout div.postcell"
+let answersHeaderText = (element "div#answers-header").GetProperty("innerText")
+let answersElements = "#mainbar div#answers div.answer"
+
+question.GetProperty("outerHTML") |> converter.Convert |> stripString @"[\t]{5,100}" " " |> stripString @"[\n\r]{3,500}" "\n\n"  |> printf "Question: %s"
