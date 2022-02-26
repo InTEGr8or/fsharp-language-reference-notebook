@@ -1,0 +1,11 @@
+#!markdown
+
+# Target Content
+
+[FSharpForFunANdProfit.com](https://fsharpforfunandprofit.com/) is one of the primary learning sites for the FSharp languange.
+
+Fortunately, the entire site is a Hugo static site hosted here: https://github.com/swlaschin/fsharpforfunandprofit.com
+
+Not quite so fortunately, none of the content is stored in executable `dotnet` Notebooks.
+
+That is what this scraper will remedy.
